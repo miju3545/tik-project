@@ -1,21 +1,17 @@
 import React, { CSSProperties, FC } from 'react';
 import styled from '@emotion/styled';
-import MenuItem from '@components/Header/MenuItem';
-import { BsCameraVideoFill, BsPencilSquare } from 'react-icons/bs';
-import { RiBookOpenFill } from 'react-icons/ri';
 
 interface IProps {
   children: React.ReactNode;
   style?: CSSProperties;
-  title: string;
+  title?: string;
 }
 
 export const Base = styled.div`
   position: absolute;
-  top: 54px;
+  top: 60px;
   right: 20px;
   width: 500px;
-  min-height: 800px;
   background-color: #fff;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -39,7 +35,6 @@ export const Header = styled.div`
 
 export const Main = styled.div`
   width: 100%;
-  background-color: gray;
   position: relative;
 `;
 

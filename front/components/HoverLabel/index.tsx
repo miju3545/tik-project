@@ -11,6 +11,7 @@ interface IProps {
 
 export const HoverLabelBase = styled.div`
   position: relative;
+  z-index: 4000;
 
   > .target:hover + .hover-label {
     opacity: 1;

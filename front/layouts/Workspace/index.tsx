@@ -15,7 +15,7 @@ const Workspace: FC<IProps> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <Base>
-        {!['/sign_in', '/sign_up'].includes(pathname) && <Header />}
+        {!['/sign_in', '/sign_up', '/'].includes(pathname) && <Header />}
         {/*<Navigation  />*/}
         <div>{children}</div>
       </Base>

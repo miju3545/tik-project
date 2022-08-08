@@ -14,7 +14,9 @@ interface IProps {
 const MessageModal: FC<IProps> = ({ show, onCloseModal }) => {
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <ModalContent title={'채팅'}>....</ModalContent>
+      <ModalContent title={'채팅'} style={{ minHeight: '800px' }}>
+        ....
+      </ModalContent>
     </Modal>
   );
 };

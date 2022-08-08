@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 interface IProps {
   icon: React.ReactNode;
   title: string;
-  url: string;
+  url?: string;
+  onClick?: () => void;
 }
 
 export const MenuItemBase = styled.li`
@@ -14,12 +15,14 @@ export const MenuItemBase = styled.li`
   border-radius: 6px;
   transition: 0.2s;
 
-  > a {
+  > a,
+  button {
     width: 100%;
     display: flex;
     align-items: center;
     padding: 10px;
-
+    background-color: transparent;
+    border: none;
     > .icon {
       margin-right: 10px;
       width: 38px;
@@ -43,13 +46,23 @@ export const MenuItemBase = styled.li`
     background-color: rgb(239, 239, 239);
   }
 `;
-const MenuItem: FC<IProps> = ({ icon, title, url }) => {
+
+export const LogoutButton = styled(MenuItemBase)``;
+
+const MenuItem: FC<IProps> = ({ icon, title, url, onClick }) => {
   return (
     <MenuItemBase>
-      <Link to={url}>
-        <div className={'icon'}>{icon}</div>
-        <div className={'title'}>{title}</div>
-      </Link>
+      {url === undefined && onClick !== undefined ? (
+        <button onClick={onClick}>
+          <div className={'icon'}>{icon}</div>
+          <div className={'title'}>{title}</div>
+        </button>
+      ) : (
+        <Link to={url || ''}>
+          <div className={'icon'}>{icon}</div>
+          <div className={'title'}>{title}</div>
+        </Link>
+      )}
     </MenuItemBase>
   );
 };

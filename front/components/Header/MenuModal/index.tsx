@@ -24,7 +24,7 @@ export const SideMenu = styled.div`
 const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <ModalContent title={'메뉴'}>
+      <ModalContent title={'메뉴'} style={{ minHeight: '800px' }}>
         <SideMenu>
           <Header>
             <h2>만들기</h2>

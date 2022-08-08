@@ -7,6 +7,7 @@ const apiRouter = require("./routes");
 
 const app = express();
 app.set("PORT", process.env.PORT || 3005);
+
 app.use(morgan("dev"));
 app.use(
   cors({
@@ -14,6 +15,10 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiRouter);
 
 app.listen(app.get("PORT"), () =>

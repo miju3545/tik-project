@@ -14,6 +14,7 @@ import { FaUser } from 'react-icons/fa';
 import HeaderItem from '@components/Header/HeaderItem';
 import MenuModal from '@components/Header/MenuModal';
 import MessageModal from '@components/Header/MessageModal';
+import UserModal from '@components/Header/UserModal';
 
 export const HeaderBase = styled.header<{ theme: any }>`
   width: 100%;
@@ -60,22 +61,28 @@ interface IModalState {
 }
 const Header = () => {
   const theme = useTheme();
-  const [showModal, setShowModal] = useState<IModalState>({ showMenuModal: false, showMessageModal: false });
+  const [showModal, setShowModal] = useState<IModalState>({
+    showMenuModal: false,
+    showMessageModal: false,
+    showUserModal: false,
+  });
 
   const onClickActionItem = useCallback((modalName: string) => {
+    onCloseModal();
     setShowModal((prev) => ({ ...prev, [modalName]: true }));
   }, []);
 
   const onCloseModal = useCallback(() => {
     setShowModal({ showMenuModal: false });
     setShowModal({ showMessageModal: false });
+    setShowModal({ showUserModal: false });
   }, []);
 
   return (
     <HeaderBase theme={theme}>
       <ul>
         <li className={'first-action-items'}>
-          <Link to={'/'}>
+          <Link to={'/browse/clubs'}>
             <ActionItem
               content={<RiChatSmile2Fill />}
               style={{ backgroundColor: theme.colors.blue[600], color: '#fff', fontSize: '24px' }}
@@ -86,7 +93,7 @@ const Header = () => {
         <li className={'mid-action-items'}>
           <HoverLabel
             label={'홈'}
-            children={<HeaderItem url="/" content={{ outline: <AiOutlineHome />, fill: <AiFillHome /> }} />}
+            children={<HeaderItem url="/browse/clubs" content={{ outline: <AiOutlineHome />, fill: <AiFillHome /> }} />}
             style={{ top: '60px' }}
           />
           <HoverLabel
@@ -112,11 +119,16 @@ const Header = () => {
             children={<ActionItem content={<AiFillMessage />} />}
           />
           <HoverLabel label={'알림'} children={<ActionItem content={<HiBell />} />} />
-          <HoverLabel label={'계정'} children={<ActionItem content={<FaUser />} />} />
+          <HoverLabel
+            onClick={() => onClickActionItem('showUserModal')}
+            label={'계정'}
+            children={<ActionItem content={<FaUser />} />}
+          />
         </li>
       </ul>
       <MenuModal show={showModal.showMenuModal} onCloseModal={onCloseModal} />
       <MessageModal show={showModal.showMessageModal} onCloseModal={onCloseModal} />
+      <UserModal show={showModal.showUserModal} onCloseModal={onCloseModal} />
     </HeaderBase>
   );
 };

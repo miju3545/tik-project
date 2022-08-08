@@ -13,9 +13,8 @@ const App = () => {
         <Switch>
           <Route path={'/groups'} component={Home} />
           <Route path={'/friends'} component={Home} />
-          <Route path={'/sign_in'} component={Intro} />
-          <Route path={'/sign_up'} component={Intro} />
-          <Route path={'/'} component={Home} />
+          <Route path={'/browse/clubs'} component={Home} />
+          <Route path={'/'} component={Intro} />
         </Switch>
       </Workspace>
     </BrowserRouter>

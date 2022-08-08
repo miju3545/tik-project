@@ -10,3 +10,7 @@
 ### GET /api/user
 - 로그인 유저 정보 가져오기
 - return IUser || false
+
+### POST /api/user/logout
+- 로그아웃
+- return "ok"
