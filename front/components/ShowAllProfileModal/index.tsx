@@ -1,5 +1,5 @@
 import React from 'react';
-import ModalContent from '@components/Header/ModalContent';
+import ModalContent from '@components/Header/MenuContent';
 
 interface IProps {}
 const ShowAllProfileModal = ({}: IProps) => {

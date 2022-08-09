@@ -28,7 +28,7 @@ interface IProps {
 }
 const ActionItem = ({ content, style, active, rest }: IProps) => {
   const theme = useTheme();
-  console.log(active);
+
   return (
     <ActionItemBase theme={theme} style={style} active={active} {...rest}>
       {content}

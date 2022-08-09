@@ -1,11 +1,8 @@
 import React, { FC } from 'react';
-import Modal from '@components/Modal';
-import styled from '@emotion/styled';
-import MenuItem from '@components/Header/MenuItem';
-import { BsPencilSquare, BsCameraVideoFill } from 'react-icons/bs';
-import { RiBookOpenFill } from 'react-icons/ri';
+import Menu from '@components/Menu';
 
-import ModalContent, { Header, Main } from '@components/Header/ModalContent';
+import MenuContent from '@components/Header/MenuContent';
+import { Header, Main } from '@components/Header/MenuContent/style';
 interface IProps {
   show: boolean;
   onCloseModal: () => void;
@@ -13,11 +10,11 @@ interface IProps {
 
 const MessageModal: FC<IProps> = ({ show, onCloseModal }) => {
   return (
-    <Modal show={show} onCloseModal={onCloseModal}>
-      <ModalContent title={'채팅'} style={{ minHeight: '800px' }}>
-        ....
-      </ModalContent>
-    </Modal>
+    <Menu show={show} onCloseModal={onCloseModal}>
+      <MenuContent title={'채팅'} style={{ minHeight: '800px' }}>
+        ... 소켓 사용 예정
+      </MenuContent>
+    </Menu>
   );
 };
 

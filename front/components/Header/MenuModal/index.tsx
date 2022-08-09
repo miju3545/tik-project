@@ -1,42 +1,60 @@
-import React, { FC } from 'react';
-import Modal from '@components/Modal';
-import styled from '@emotion/styled';
+import React, { FC, useCallback, useState } from 'react';
+import Menu from '@components/Menu';
 import MenuItem from '@components/Header/MenuItem';
 import { BsPencilSquare, BsCameraVideoFill } from 'react-icons/bs';
 import { RiBookOpenFill } from 'react-icons/ri';
+import MenuContent from '@components/Header/MenuContent';
+import { Header } from '@components/Header/MenuContent/style';
+import CreatePostModal from '@components/Header/CreatePostModal';
+import { SideMenu } from '@components/Header/MenuModal/style';
 
-import ModalContent, { Header, Main } from '@components/Header/ModalContent';
 interface IProps {
-  show: boolean;
+  show: boolean | { [key: string]: any }[];
   onCloseModal: () => void;
 }
 
-export const SideMenu = styled.div`
-  position: fixed;
-  right: 50px;
-  top: 100px;
-  width: 200px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  padding: 12px;
-  background-color: #fff;
-  border-radius: 6px;
-`;
+interface IState {
+  [key: string]: any;
+}
+
 const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
+  const [showModal, setShowModal] = useState<IState>({ showCreatePostModal: false });
+  const onClickModal = useCallback((modalName: string) => {
+    onCloseModal();
+    setShowModal((prev) => {
+      for (let v in prev) {
+        if (v !== modalName) {
+          prev[v] = false;
+        } else {
+          prev[v] = !prev[v];
+        }
+      }
+      return { ...prev };
+    });
+  }, []);
+
   return (
-    <Modal show={show} onCloseModal={onCloseModal}>
-      <ModalContent title={'메뉴'} style={{ minHeight: '800px' }}>
-        <SideMenu>
-          <Header>
-            <h2>만들기</h2>
-          </Header>
-          <ul>
-            <MenuItem url="/" icon={<BsPencilSquare />} title={'게시물'} />
-            <MenuItem url="/" icon={<RiBookOpenFill />} title={'스토리'} />
-            <MenuItem url="/" icon={<BsCameraVideoFill />} title={'룸스'} />
-          </ul>
-        </SideMenu>
-      </ModalContent>
-    </Modal>
+    <>
+      <Menu show={show} onCloseModal={onCloseModal}>
+        <MenuContent title={'메뉴'} style={{ minHeight: '800px' }}>
+          <SideMenu>
+            <Header>
+              <h2>만들기</h2>
+            </Header>
+            <ul>
+              <MenuItem
+                onClick={() => onClickModal('showCreatePostModal')}
+                icon={<BsPencilSquare />}
+                title={'게시물'}
+              />
+              <MenuItem url="/" icon={<RiBookOpenFill />} title={'스토리'} />
+              <MenuItem url="/" icon={<BsCameraVideoFill />} title={'룸스'} />
+            </ul>
+          </SideMenu>
+        </MenuContent>
+      </Menu>
+      <CreatePostModal show={showModal.showCreatePostModal} onCloseModal={() => onClickModal('showCreatePostModal')} />
+    </>
   );
 };
 

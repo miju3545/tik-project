@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
+import { FiArrowLeft } from 'react-icons/fi';
 import { Base, Header, Main } from '@components/Header/ModalContent/style';
 
 interface IProps {
@@ -10,15 +10,14 @@ interface IProps {
   style?: CSSProperties;
 }
 
-const ModalContent = ({ title, children, show, onCloseModal, style }: IProps) => {
+const PrevModalContent = ({ title, children, show, onCloseModal, style }: IProps) => {
   if (!show) return null;
-
   return (
     <Base style={style}>
       <Header>
         <h1>{title}</h1>
-        <span className={'close-button'} onClick={onCloseModal}>
-          <IoCloseOutline />
+        <span className={'prev-button'} onClick={onCloseModal}>
+          <FiArrowLeft />
         </span>
       </Header>
       <Main>{children}</Main>
@@ -26,4 +25,4 @@ const ModalContent = ({ title, children, show, onCloseModal, style }: IProps) =>
   );
 };
 
-export default ModalContent;
+export default PrevModalContent;

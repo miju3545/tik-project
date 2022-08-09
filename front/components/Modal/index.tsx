@@ -1,22 +1,24 @@
-import React, { FC, useCallback } from 'react';
+import React, { CSSProperties, FC, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 interface IProps {
   children: React.ReactNode;
   show: boolean;
   onCloseModal: () => void;
+  style?: CSSProperties;
 }
 
-export const ModalBase = styled.div`
+const ModalBase = styled.div`
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   bottom: 0;
-  z-index: 3000;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 5000;
 `;
 
-const Modal: FC<IProps> = ({ children, show, onCloseModal }) => {
+const Menu: FC<IProps> = ({ children, show, onCloseModal, style }) => {
   const stopPropagation = useCallback((e: any) => {
     e.stopPropagation();
   }, []);
@@ -24,10 +26,10 @@ const Modal: FC<IProps> = ({ children, show, onCloseModal }) => {
   if (!show) return null;
 
   return (
-    <ModalBase onClick={onCloseModal}>
+    <ModalBase onClick={onCloseModal} style={style}>
       <div onClick={stopPropagation}>{children}</div>
     </ModalBase>
   );
 };
 
-export default Modal;
+export default Menu;

@@ -15,46 +15,7 @@ import HeaderItem from '@components/Header/HeaderItem';
 import MenuModal from '@components/Header/MenuModal';
 import MessageModal from '@components/Header/MessageModal';
 import UserModal from '@components/Header/UserModal';
-
-export const HeaderBase = styled.header<{ theme: any }>`
-  width: 100%;
-  height: 58px;
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 20px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  padding: 0 20px;
-  > ul {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-
-    > li {
-      width: 33.3%;
-      height: 100%;
-      list-style: none;
-      display: flex;
-      align-items: center;
-    }
-
-    > li.first-action-items {
-      > a {
-        margin-right: 10px;
-      }
-    }
-    > li.mid-action-items {
-      > div {
-        display: block;
-        width: 33.3%;
-      }
-    }
-    > li.last-action-items {
-      justify-content: flex-end;
-      > div {
-        margin-left: 10px;
-      }
-    }
-  }
-`;
+import { HeaderBase } from '@components/Header/style';
 
 interface IModalState {
   [key: string]: any;
@@ -66,16 +27,18 @@ const Header = () => {
     showMessageModal: false,
     showUserModal: false,
   });
-
+  // 자신 빼고 다 false
   const onClickActionItem = useCallback((modalName: string) => {
-    onCloseModal();
-    setShowModal((prev) => ({ ...prev, [modalName]: true }));
-  }, []);
-
-  const onCloseModal = useCallback(() => {
-    setShowModal({ showMenuModal: false });
-    setShowModal({ showMessageModal: false });
-    setShowModal({ showUserModal: false });
+    setShowModal((prev) => {
+      for (let v in prev) {
+        if (v !== modalName) {
+          prev[v] = false;
+        } else {
+          prev[v] = !prev[v];
+        }
+      }
+      return { ...prev };
+    });
   }, []);
 
   return (
@@ -126,9 +89,9 @@ const Header = () => {
           />
         </li>
       </ul>
-      <MenuModal show={showModal.showMenuModal} onCloseModal={onCloseModal} />
-      <MessageModal show={showModal.showMessageModal} onCloseModal={onCloseModal} />
-      <UserModal show={showModal.showUserModal} onCloseModal={onCloseModal} />
+      <MenuModal show={showModal.showMenuModal} onCloseModal={() => onClickActionItem('showMenuModal')} />
+      <MessageModal show={showModal.showMessageModal} onCloseModal={() => onClickActionItem('showMessageModal')} />
+      <UserModal show={showModal.showUserModal} onCloseModal={() => onClickActionItem('showUserModal')} />
     </HeaderBase>
   );
 };
