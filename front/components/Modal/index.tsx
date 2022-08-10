@@ -14,7 +14,7 @@ const ModalBase = styled.div`
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 5000;
 `;
 

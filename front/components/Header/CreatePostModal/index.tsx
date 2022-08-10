@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Modal from '@components/Modal';
-import styled from '@emotion/styled';
 import ModalContent from '@components/Header/ModalContent';
 import { useForm } from 'react-hook-form';
 import { BsImages } from 'react-icons/bs';
@@ -12,6 +11,10 @@ import ImageVideoDropper from '@components/Header/CreatePostModal/ImageVideoDrop
 import LocationDropper from '@components/Header/CreatePostModal/LocationDropper';
 import MentionDropper from '@components/Header/CreatePostModal/MentionDropper';
 import ContinueMessageModal from '@components/Header/ContinueMessageModal';
+import ImageVideoPreviewDropper from '@components/Header/CreatePostModal/ImageVideoPreviewDropper';
+import { FormContainer, Form, ToolBox, InputBox, ToolItem, Button } from '@components/Header/CreatePostModal/style';
+import axios from 'axios';
+import MentionMessageModal from '@components/Header/MentionMessageModal';
 
 interface IProps {
   show: boolean;
@@ -20,102 +23,17 @@ interface IProps {
 
 interface IForm {
   content: string;
-  private: boolean;
-  imageOrVideo: string;
+  imageOrVideoFiles: [];
   location: string;
   mention: string | null;
-  hashtag: { content: string }[] | null;
+  // hashtag: { content: string }[] |  null;
+  isPublic: boolean;
 }
-export const FormContainer = styled.div`
-  padding: 0 20px 20px;
-  width: 100%;
-`;
 
-export const Form = styled.form`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-export const InputBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  > textarea {
-    width: 100%;
-    min-height: 120px;
-    resize: unset;
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    border: none;
-    &::placeholder {
-      font-size: 22px;
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  > .dropper {
-  }
-`;
-
-export const ToolBox = styled.div`
-  width: 100%;
-  padding: 20px;
-  border: 1px solid #dfdfdf;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: 0.2s;
-  height: 70px;
-  margin-top: 20px;
-
-  > .title {
-    font-weight: 600;
-  }
-
-  > ul {
-    display: flex;
-  }
-
-  &:hover {
-    border-color: darkgray;
-  }
-`;
-
-export const ToolItem = styled.li`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  margin-left: 3px;
-  transition: 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #efefef;
-  }
-`;
-
-export const Button = styled.button<{ disabled: boolean }>`
-  width: 100%;
-  background-color: ${({ disabled }) => (disabled ? '#a3bee1' : '#1676f2')};
-  height: 38px;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  margin-top: 20px;
-  font-weight: 600;
-  transition: 0.2s;
-  cursor: pointer;
-`;
+interface IPreview {
+  src: string;
+  fileName: string;
+}
 
 const CreatePostModal = ({ show, onCloseModal }: IProps) => {
   const userData = { id: 1, nickname: 'example', email: 'example@gmail.com' };
@@ -123,25 +41,36 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     register,
     handleSubmit,
     reset,
+    resetField,
     watch,
     formState: { errors },
   } = useForm<IForm>({
-    defaultValues: { content: '', private: false, imageOrVideo: '', location: 'Gangnam', hashtag: null, mention: null },
+    defaultValues: {
+      content: '',
+      imageOrVideoFiles: [],
+      location: 'Gangnam',
+      // hashtag: null,
+      mention: null,
+      isPublic: true,
+    },
     mode: 'onChange',
   });
 
+  const inputValues = watch();
   const [showModal, setShowModal] = useState<{ [key: string]: any }>({
     showDefaultScreen: true,
     showImageOrVideoDropper: false,
+    showImageOrVideoPreviewDropper: false,
+    showEditImageOrVideoDropper: false,
     showLocationDropper: false,
     showMentionDropper: false,
-    showContinueMessageDropper: true,
+    showContinueMessageModal: false,
+    showMentionMessageModal: false,
     isImageOrVideoSelected: false,
     isMentionSelected: false,
     isLocationSelected: true,
   });
-
-  const { content, imageOrVideo, location, mention } = watch();
+  const [previews, setPreviews] = useState<IPreview[]>([]);
 
   const onClickOption = useCallback((optionItem: string) => {
     setShowModal((prev) => {
@@ -154,7 +83,11 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
         }
 
         flag =
-          ['showDefaultScreen', 'showLocationDropper', 'showMentionDropper'].includes(optionItem) && !prev[v] ? 1 : 0;
+          ['showDefaultScreen', 'showLocationDropper', 'showMentionDropper', 'showMentionMessageModal'].includes(
+            optionItem,
+          ) && !prev[v]
+            ? 1
+            : 0;
       }
 
       if (!flag) prev['showDefaultScreen'] = true;
@@ -164,13 +97,84 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
   }, []);
 
   const onSubmit = useCallback((data: IForm) => {
-    console.log(data);
+    const formData = new FormData();
+
+    // 타입 별로 다른 루트 탈 수 있게 수정할 것!
+    for (const [key, value] of Object.entries(data)) {
+      if (key === 'imageOrVideoFiles') {
+        for (const [k, v] of Object.entries(data['imageOrVideoFiles'])) {
+          formData.append('imageOrVideoFiles', v);
+        }
+      } else {
+        formData.append(key, value);
+      }
+    }
+
+    axios
+      .post('/api/post', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  const onClose = useCallback((data) => {
+    onCloseModal();
+    if (data.content || data.imageOrVideoFiles.length >= 1 || data.mention)
+      setShowModal((prev) => ({ ...prev, showContinueMessageModal: true }));
+  }, []);
+
+  // useEffect(() => {
+  //   if (inputValues.imageOrVideoFiles.length) {
+  //     setShowModal((prev) => ({
+  //       ...prev,
+  //       showImageOrVideoDropper: false,
+  //       showImageOrVideoPreviewDropper: !prev['showImageOrVideoPreviewDropper'],
+  //     }));
+  //   }
+  // }, [inputValues.imageOrVideoFiles]);
+
+  const onChangeImageVideoDropper = useCallback(async (e: any) => {
+    const previewImages: IPreview[] = await Promise.all(
+      Array.from(e.target.files).map(async (file: any) => {
+        return new Promise((resolve, reject) => {
+          try {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = (e: any) => resolve({ fileName: file.name, src: e.target.result });
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }),
+    );
+
+    if (previewImages.length) {
+      setShowModal((prev) => ({
+        ...prev,
+        showImageOrVideoDropper: false,
+        showImageOrVideoPreviewDropper: !prev['showImageOrVideoPreviewDropper'],
+        showMentionMessageModal: true,
+      }));
+
+      setPreviews(previewImages);
+
+      setTimeout(() => {
+        setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }));
+      }, 3000);
+    }
   }, []);
 
   return (
     <>
-      <Modal show={true} onCloseModal={onCloseModal}>
-        <ModalContent title={'게시물 만들기'} show={showModal.showDefaultScreen} onCloseModal={onCloseModal}>
+      <Modal show={show} onCloseModal={() => onClose(inputValues)}>
+        <ModalContent
+          title={'게시물 만들기'}
+          show={showModal.showDefaultScreen}
+          onCloseModal={() => onClose(inputValues)}
+        >
           <UserInfoHeader />
           <FormContainer>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -178,9 +182,21 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                 <textarea {...register('content')} placeholder={`${userData.nickname}님, 무슨 생각을 하고 계신가요?`} />
                 <div className={'dropper'}>
                   <ImageVideoDropper
-                    register={register('imageOrVideo')}
+                    register={register('imageOrVideoFiles', { onChange: onChangeImageVideoDropper })}
                     show={showModal.showImageOrVideoDropper}
-                    onCloseModal={() => onClickOption('showImageOrVideoDropper')}
+                    onCloseModal={() => {
+                      onClickOption('showImageOrVideoDropper');
+                      resetField('imageOrVideoFiles');
+                    }}
+                  />
+                  <ImageVideoPreviewDropper
+                    register={register('imageOrVideoFiles')}
+                    show={showModal.showImageOrVideoPreviewDropper}
+                    onCloseModal={() => {
+                      onClickOption('showImageOrVideoPreviewDropper');
+                      resetField('imageOrVideoFiles');
+                    }}
+                    previews={previews}
                   />
                 </div>
               </InputBox>
@@ -195,7 +211,10 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                       <ToolItem
                         style={{
                           color: '#44bd63',
-                          backgroundColor: showModal.isImageOrVideoSelected || imageOrVideo ? '#e3f0d4' : 'transparent',
+                          backgroundColor:
+                            showModal.isImageOrVideoSelected || inputValues.imageOrVideoFiles.length >= 1
+                              ? '#e3f0d4'
+                              : 'transparent',
                         }}
                       >
                         <BsImages />
@@ -210,7 +229,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                       <ToolItem
                         style={{
                           color: '#1676f2',
-                          backgroundColor: showModal.isMentionSelected || mention ? '#e6f3fe' : 'transparent',
+                          backgroundColor:
+                            showModal.isMentionSelected || inputValues.mention ? '#e6f3fe' : 'transparent',
                         }}
                       >
                         <FaUserTag />
@@ -234,7 +254,11 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                   />
                 </ul>
               </ToolBox>
-              <Button disabled={!content}>공유하기</Button>
+              <Button
+                disabled={!inputValues.content && inputValues.imageOrVideoFiles.length < 1 && !inputValues.mention}
+              >
+                공유하기
+              </Button>
             </Form>
           </FormContainer>
         </ModalContent>
@@ -251,8 +275,15 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
           onClickOption={onClickOption}
         />
         <ContinueMessageModal
-          show={showModal.showContinueMessageDropper}
-          onCloseModal={() => onClickOption('showContinueMessageDropper')}
+          show={showModal.showContinueMessageModal}
+          onCloseModal={() => onClickOption('showContinueMessageModal')}
+          onClickOption={onClickOption}
+          reset={reset}
+          setShowModal={setShowModal}
+        />
+        <MentionMessageModal
+          show={showModal.showMentionMessageModal}
+          onCloseModal={() => setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }))}
         />
       </Modal>
     </>

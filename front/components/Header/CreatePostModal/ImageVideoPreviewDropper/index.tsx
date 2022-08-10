@@ -6,16 +6,18 @@ interface IProps {
   show: boolean;
   onCloseModal: () => void;
   register: any;
+  previews: { fileName: string; src: string }[];
 }
 
 export const Base = styled.div`
   width: 100%;
-  height: 200px;
+  max-height: 440px;
   border: 1px solid #dfdfdf;
   border-radius: 4px;
   padding: 10px;
   position: relative;
   margin-top: 20px;
+  overflow-x: scroll;
 
   > .close-button {
     width: 30px;
@@ -38,62 +40,56 @@ export const Base = styled.div`
     }
   }
 
-  > label {
+  > .preview-box {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f6f8fa;
     border-radius: 4px;
     cursor: pointer;
     transition: 0.2s;
 
-    > .icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 20px;
-      background-color: #e4e6ea;
-      margin-bottom: 4px;
-    }
-
-    > .big-text {
-      font-size: 16px;
-      font-weight: 600;
-    }
-    > .small-text {
-      font-size: 13px;
-      color: gray;
-    }
-
-    &:hover {
-      background-color: #efefef;
+    > img {
+      object-fit: cover;
+      width: 100%;
+      height: auto;
     }
   }
-`;
-const ImageVideoDropper = ({ show, onCloseModal, register }: IProps) => {
-  if (!show) return null;
 
+  &:hover + .toolbox {
+    opacity: 1;
+  }
+`;
+
+export const ToolBox = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.2s;
+`;
+const ImageVideoPreviewDropper = ({ show, onCloseModal, register, previews }: IProps) => {
+  if (!show) return null;
+  console.log('previews', previews);
   return (
     <Base>
       <button className="close-button" onClick={onCloseModal}>
         <IoCloseOutline />
       </button>
-      <label>
-        <input type={'file'} {...register} multiple={true} accept={'image/jpeg, image/png'} hidden />
-        <div className={'icon'}>
-          <MdAddToPhotos />
-        </div>
-        <span className={'big-text'}>사진/동영상 추가</span>
-        <span className={'small-text'}>또는 끌어서 놓습니다</span>
-      </label>
+      <div className={'preview-box'}>
+        <input type={'file'} {...register} hidden />
+        {previews.map((file, idx) => (
+          <img key={idx} src={file.src} />
+        ))}
+      </div>
+      <ToolBox className={'toolbox'}></ToolBox>
     </Base>
   );
 };
 
-export default ImageVideoDropper;
+export default ImageVideoPreviewDropper;
