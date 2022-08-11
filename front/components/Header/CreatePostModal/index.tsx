@@ -194,6 +194,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                     onCloseModal={() => {
                       onClickOption('showImageOrVideoDropper');
                       resetField('files');
+                      setPreviews([]);
+                      setFiles([]);
                     }}
                   />
                   <ImageVideoPreviewDropper
@@ -202,6 +204,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                     onCloseModal={() => {
                       onClickOption('showImageOrVideoPreviewDropper');
                       resetField('files');
+                      setPreviews([]);
+                      setFiles([]);
                     }}
                     previews={previews}
                   />

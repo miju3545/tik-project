@@ -35,6 +35,7 @@ export const Base = styled.div`
     background-color: #fff;
     cursor: pointer;
     transition: 0.2s;
+    z-index: 4000;
 
     &:hover {
       background-color: #efefef;
@@ -53,15 +54,17 @@ export const Base = styled.div`
     flex-wrap: wrap;
 
     > img {
-      object-fit: cover;
+      //object-fit: cover;
       max-width: 100%;
       min-width: 33.3%;
       height: auto;
     }
   }
 
-  &:hover + .toolbox {
-    opacity: 1;
+  &:hover {
+    > .toolbox {
+      opacity: 1;
+    }
   }
 `;
 
@@ -75,6 +78,7 @@ export const ToolBox = styled.div`
   right: 0;
   bottom: 0;
   transition: 0.2s;
+  opacity: 0;
 
   > .tools-wrapper {
     display: flex;
