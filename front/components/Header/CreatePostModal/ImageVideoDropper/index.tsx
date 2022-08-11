@@ -85,7 +85,7 @@ const ImageVideoDropper = ({ show, onCloseModal, register }: IProps) => {
         <IoCloseOutline />
       </button>
       <label>
-        <input type={'file'} {...register} multiple={true} accept={'image/jpeg, image/png'} hidden />
+        <input type={'file'} {...register} multiple={true} accept={'image/jpeg, image/png, image/jpg'} hidden />
         <div className={'icon'}>
           <MdAddToPhotos />
         </div>

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Modal from '@components/Modal';
 import ModalContent from '@components/Header/ModalContent';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { BsImages } from 'react-icons/bs';
 import { FaUserTag } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -14,20 +14,33 @@ import ContinueMessageModal from '@components/Header/ContinueMessageModal';
 import ImageVideoPreviewDropper from '@components/Header/CreatePostModal/ImageVideoPreviewDropper';
 import { FormContainer, Form, ToolBox, InputBox, ToolItem, Button } from '@components/Header/CreatePostModal/style';
 import axios from 'axios';
-import MentionMessageModal from '@components/Header/MentionMessageModal';
+import MentionMessageModal from '@components/Header/CreatePostModal/MentionMessageModal';
+import useInput from '@hooks/useInput';
 
 interface IProps {
   show: boolean;
   onCloseModal: () => void;
 }
 
+type IFile = {
+  destination: string;
+  encoding: string;
+  fieldname: string;
+  filename: string;
+  mimetype: string;
+  originalname: string;
+  path: string;
+  size: number;
+};
+
 interface IForm {
   content: string;
-  imageOrVideoFiles: [];
+  files: IFile[];
   location: string;
   mention: string | null;
   // hashtag: { content: string }[] |  null;
   isPublic: boolean;
+  name: string;
 }
 
 interface IPreview {
@@ -47,7 +60,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
   } = useForm<IForm>({
     defaultValues: {
       content: '',
-      imageOrVideoFiles: [],
+      files: [],
       location: 'Gangnam',
       // hashtag: null,
       mention: null,
@@ -55,6 +68,9 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     },
     mode: 'onChange',
   });
+
+  const [files, setFiles] = useState<IFile[]>([]);
+  const [previews, setPreviews] = useState<IPreview[]>([]);
 
   const inputValues = watch();
   const [showModal, setShowModal] = useState<{ [key: string]: any }>({
@@ -70,8 +86,6 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     isMentionSelected: false,
     isLocationSelected: true,
   });
-  const [previews, setPreviews] = useState<IPreview[]>([]);
-
   const onClickOption = useCallback((optionItem: string) => {
     setShowModal((prev) => {
       let flag = 0;
@@ -96,19 +110,21 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     });
   }, []);
 
-  const onSubmit = useCallback((data: IForm) => {
+  const onSubmit = useCallback((data: IForm, files: IFile[]) => {
     const formData = new FormData();
-
     // 타입 별로 다른 루트 탈 수 있게 수정할 것!
+
     for (const [key, value] of Object.entries(data)) {
-      if (key === 'imageOrVideoFiles') {
-        for (const [k, v] of Object.entries(data['imageOrVideoFiles'])) {
-          formData.append('imageOrVideoFiles', v);
-        }
-      } else {
+      if (key !== 'files') {
         formData.append(key, value);
       }
     }
+
+    for (const file in files) {
+      formData.append('files', file);
+    }
+
+    console.log(formData);
 
     axios
       .post('/api/post', formData, {
@@ -126,17 +142,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
       setShowModal((prev) => ({ ...prev, showContinueMessageModal: true }));
   }, []);
 
-  // useEffect(() => {
-  //   if (inputValues.imageOrVideoFiles.length) {
-  //     setShowModal((prev) => ({
-  //       ...prev,
-  //       showImageOrVideoDropper: false,
-  //       showImageOrVideoPreviewDropper: !prev['showImageOrVideoPreviewDropper'],
-  //     }));
-  //   }
-  // }, [inputValues.imageOrVideoFiles]);
-
-  const onChangeImageVideoDropper = useCallback(async (e: any) => {
+  const onChangeFiles = useCallback(async (e: any) => {
     const previewImages: IPreview[] = await Promise.all(
       Array.from(e.target.files).map(async (file: any) => {
         return new Promise((resolve, reject) => {
@@ -150,6 +156,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
         });
       }),
     );
+    setFiles((prev) => [...prev, ...e.target.files]);
 
     if (previewImages.length) {
       setShowModal((prev) => ({
@@ -159,7 +166,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
         showMentionMessageModal: true,
       }));
 
-      setPreviews(previewImages);
+      setPreviews((prev) => [...previewImages, ...prev]);
 
       setTimeout(() => {
         setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }));
@@ -169,34 +176,38 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
 
   return (
     <>
-      <Modal show={show} onCloseModal={() => onClose(inputValues)}>
+      <Modal show={true} onCloseModal={() => onClose(inputValues)}>
         <ModalContent
           title={'게시물 만들기'}
           show={showModal.showDefaultScreen}
           onCloseModal={() => onClose(inputValues)}
         >
-          <UserInfoHeader />
+          <UserInfoHeader register={register('isPublic')} isValue={Boolean(inputValues.isPublic)} />
           <FormContainer>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(() => onSubmit(inputValues, files))}>
               <InputBox>
                 <textarea {...register('content')} placeholder={`${userData.nickname}님, 무슨 생각을 하고 계신가요?`} />
                 <div className={'dropper'}>
                   <ImageVideoDropper
-                    register={register('imageOrVideoFiles', { onChange: onChangeImageVideoDropper })}
+                    register={register('files', { onChange: onChangeFiles, value: files })}
                     show={showModal.showImageOrVideoDropper}
                     onCloseModal={() => {
                       onClickOption('showImageOrVideoDropper');
-                      resetField('imageOrVideoFiles');
+                      resetField('files');
                     }}
                   />
                   <ImageVideoPreviewDropper
-                    register={register('imageOrVideoFiles')}
-                    show={showModal.showImageOrVideoPreviewDropper}
+                    register={register('files', { onChange: onChangeFiles, value: files })}
+                    show={files.length >= 1 || showModal.showImageOrVideoPreviewDropper}
                     onCloseModal={() => {
                       onClickOption('showImageOrVideoPreviewDropper');
-                      resetField('imageOrVideoFiles');
+                      resetField('files');
                     }}
                     previews={previews}
+                  />
+                  <MentionMessageModal
+                    show={showModal.showMentionMessageModal}
+                    onCloseModal={() => setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }))}
                   />
                 </div>
               </InputBox>
@@ -212,7 +223,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                         style={{
                           color: '#44bd63',
                           backgroundColor:
-                            showModal.isImageOrVideoSelected || inputValues.imageOrVideoFiles.length >= 1
+                            showModal.isImageOrVideoSelected || inputValues.files.length >= 1
                               ? '#e3f0d4'
                               : 'transparent',
                         }}
@@ -254,9 +265,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                   />
                 </ul>
               </ToolBox>
-              <Button
-                disabled={!inputValues.content && inputValues.imageOrVideoFiles.length < 1 && !inputValues.mention}
-              >
+              <Button disabled={!inputValues.content && inputValues.files.length < 1 && !inputValues.mention}>
                 공유하기
               </Button>
             </Form>
@@ -280,10 +289,6 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
           onClickOption={onClickOption}
           reset={reset}
           setShowModal={setShowModal}
-        />
-        <MentionMessageModal
-          show={showModal.showMentionMessageModal}
-          onCloseModal={() => setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }))}
         />
       </Modal>
     </>

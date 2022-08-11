@@ -8,7 +8,7 @@ interface IProps {
 }
 export const ModalContent = styled.div`
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 8px 10px;
@@ -16,13 +16,14 @@ export const ModalContent = styled.div`
   color: #fff;
   border-radius: 4px;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
 `;
 
 const MentionMessageModal = ({ show, onCloseModal }: IProps) => {
   return (
     <Modal show={show} onCloseModal={onCloseModal} style={{ backgroundColor: 'transparent' }}>
-      <ModalContent>사람/장소를 태그하려면 사진을 클릭하세요.</ModalContent>
+      <ModalContent>사람/장소를 태그하려면 사진을 클릭하세요</ModalContent>
     </Modal>
   );
 };

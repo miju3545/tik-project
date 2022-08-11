@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import ToggleButton from '@components/Header/ToggleButton';
+
+interface IProps {
+  register: any;
+  isValue: boolean;
+}
 
 export const Base = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 16px 20px;
+  padding: 10px 20px;
 
   > .avatar {
     > a {
@@ -39,7 +45,7 @@ export const Base = styled.div`
   }
 `;
 
-const UserInfoHeader = () => {
+const UserInfoHeader = ({ register, isValue }: IProps) => {
   const userData = { id: 1, nickname: 'example', email: 'example@gmail.com' };
   return (
     <Base>
@@ -50,6 +56,7 @@ const UserInfoHeader = () => {
       </div>
       <div className={'detail'}>
         <span className={'nickname'}>{userData.nickname}</span>
+        <ToggleButton register={register} isValue={isValue} />
       </div>
     </Base>
   );
