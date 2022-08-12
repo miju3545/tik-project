@@ -10,7 +10,6 @@ import { BsGrid3X3GapFill } from 'react-icons/bs';
 import { RiChatSmile2Fill } from 'react-icons/ri';
 import { HiBell, HiOutlineUserGroup, HiUserGroup, HiOutlineUsers, HiUsers } from 'react-icons/hi';
 import { FaUser } from 'react-icons/fa';
-
 import HeaderItem from '@components/Header/HeaderItem';
 import MenuModal from '@components/Header/MenuModal';
 import MessageModal from '@components/Header/MessageModal';

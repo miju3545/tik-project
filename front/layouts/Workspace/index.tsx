@@ -16,16 +16,16 @@ const Workspace: FC<IProps> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <Base>
-        {!['/sign_in', '/sign_up', '/'].includes(pathname) && (
-          <>
-            <Header />
-            <div className={'container'}>
+        {!['/sign_in', '/sign_up', '/'].includes(pathname) && <Header />}
+        <div className={'container'}>
+          {!['/sign_in', '/sign_up', '/'].includes(pathname) && (
+            <div>
               <Navigation />
-              <Main>{children}</Main>
-              <div>...</div>
             </div>
-          </>
-        )}
+          )}
+          <Main>{children}</Main>
+          <div>...</div>
+        </div>
       </Base>
     </ThemeProvider>
   );

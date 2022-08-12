@@ -73,7 +73,7 @@ export const REG_PHONE = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/i;
 
 const SignIn = () => {
   const theme = useTheme();
-  const { data: userData, mutate: userDataMutate } = useSWR('/api/user', fetcher);
+  // const { data: userData, mutate: userDataMutate } = useSWR('/api/user', fetcher);
   const {
     register,
     handleSubmit,
@@ -91,13 +91,13 @@ const SignIn = () => {
       .then((res) => {
         console.log(data);
         reset();
-        userDataMutate();
+        // userDataMutate();
       })
       .catch((error) => console.error(error));
   }, []);
 
   // if (!userData || userData === 0) return <div>로딩중...</div>;
-  if (userData) return <Redirect to={'/browse/clubs'} />;
+  // if (userData) return <Redirect to={'/browse/clubs'} />;
 
   return (
     <Base theme={theme}>

@@ -7,6 +7,7 @@ export const Base = styled.nav`
 
   > ul {
     position: fixed;
+    //float: left;
     width: 260px;
 
     > li {

@@ -8,6 +8,7 @@ export const HeaderBase = styled.header<{ theme: any }>`
   padding: 0 20px;
   position: fixed;
   z-index: 3000;
+
   > ul {
     width: 100%;
     height: 100%;

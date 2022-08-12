@@ -8,7 +8,7 @@ interface IProps {
   style?: CSSProperties;
 }
 
-export const MenuBase = styled.div`
+export const Base = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -25,9 +25,9 @@ const Menu: FC<IProps> = ({ children, show, onCloseModal, style }) => {
   if (!show) return null;
 
   return (
-    <MenuBase onClick={onCloseModal} style={style}>
+    <Base onClick={onCloseModal} style={style}>
       <div onClick={stopPropagation}>{children}</div>
-    </MenuBase>
+    </Base>
   );
 };
 

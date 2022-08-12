@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 export const Base = styled.div`
   width: 100vw;
+  height: 100vh;
 
   > .container {
     display: flex;
@@ -19,6 +20,7 @@ export const Base = styled.div`
     > main {
       flex: 1.5;
       height: 10000px;
+      border: 1px solid #dfdfdf;
     }
   }
 `;

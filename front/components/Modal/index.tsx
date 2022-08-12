@@ -8,8 +8,8 @@ interface IProps {
   style?: CSSProperties;
 }
 
-const ModalBase = styled.div`
-  position: absolute;
+const Base = styled.div`
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
@@ -26,9 +26,9 @@ const Modal: FC<IProps> = ({ children, show, onCloseModal, style }) => {
   if (!show) return null;
 
   return (
-    <ModalBase onClick={onCloseModal} style={style}>
+    <Base onClick={onCloseModal} style={style}>
       <div onClick={stopPropagation}>{children}</div>
-    </ModalBase>
+    </Base>
   );
 };
 

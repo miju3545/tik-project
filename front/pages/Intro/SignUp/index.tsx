@@ -19,7 +19,7 @@ interface IForm {
 }
 
 const SignUp = () => {
-  const { data: userData, mutate: userDataMutate } = useSWR('/api/user', fetcher);
+  // const { data: userData, mutate: userDataMutate } = useSWR('/api/user', fetcher);
 
   const {
     register,
@@ -48,7 +48,7 @@ const SignUp = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  if (userData) return <Redirect to={'/'} />;
+  // if (userData) return <Redirect to={'/'} />;
 
   return (
     <>
