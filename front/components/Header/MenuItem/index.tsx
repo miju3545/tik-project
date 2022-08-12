@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuItemBase } from '@components/Header/MenuItem/style';
 
@@ -7,11 +7,12 @@ interface IProps {
   title: string;
   url?: string;
   onClick?: () => void;
+  style?: CSSProperties;
 }
 
-const MenuItem: FC<IProps> = ({ icon, title, url, onClick }) => {
+const MenuItem: FC<IProps> = ({ icon, title, url, onClick, style }) => {
   return (
-    <MenuItemBase>
+    <MenuItemBase style={style}>
       {url === undefined && onClick !== undefined ? (
         <button onClick={onClick}>
           <div className={'icon'}>{icon}</div>

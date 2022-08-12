@@ -10,7 +10,7 @@ export const Form = styled.form`
   width: 100%;
   height: 100%;
 `;
-export const InputBox = styled.div`
+export const InputBox = styled.div<{ [key: string]: any }>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -18,11 +18,13 @@ export const InputBox = styled.div`
 
   > textarea {
     width: 100%;
-    min-height: 120px;
+    min-height: ${({ isInputValues }) => (isInputValues ? '80px' : '120px')};
     resize: unset;
     font-family: 'Poppins', sans-serif;
-    font-size: 22px;
+    font-size: ${({ isInputValues }) => (isInputValues ? '16px' : '22px')};
     border: none;
+    transition: 0.2s;
+
     &::placeholder {
       font-size: 22px;
     }
@@ -38,14 +40,14 @@ export const InputBox = styled.div`
 
 export const ToolBox = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 14px;
   border: 1px solid #dfdfdf;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: 0.2s;
-  height: 70px;
+  height: 54px;
   margin-top: 20px;
 
   > .title {
@@ -80,7 +82,7 @@ export const ToolItem = styled.li`
 
 export const Button = styled.button<{ disabled: boolean }>`
   width: 100%;
-  background-color: ${({ disabled }) => (disabled ? '#a3bee1' : '#1676f2')};
+  background-color: ${({ disabled }) => (disabled ? '#e4e6ea' : '#1676f2')};
   height: 38px;
   color: #fff;
   border: none;

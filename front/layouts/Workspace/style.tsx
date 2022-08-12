@@ -2,6 +2,25 @@ import styled from '@emotion/styled';
 
 export const Base = styled.div`
   width: 100vw;
-  min-height: 100vh;
-  background-color: #f0f2f6;
+
+  > .container {
+    display: flex;
+    position: absolute;
+    background-color: #f0f2f6;
+    top: 58px;
+    left: 0;
+    right: 0;
+
+    > div,
+    nav {
+      flex: 1;
+    }
+
+    > main {
+      flex: 1.5;
+      height: 10000px;
+    }
+  }
 `;
+
+export const Main = styled.main``;

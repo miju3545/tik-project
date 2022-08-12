@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Base } from '@layouts/Workspace/style';
+import { Base, Main } from '@layouts/Workspace/style';
 import Header from '@components/Header';
 import { ThemeContext, ThemeProvider } from '@emotion/react';
 import { theme } from '@themes/themes';
 import { useLocation } from 'react-router';
+import Navigation from '@components/Navigation';
 
 interface IProps {
   children: React.ReactNode;
@@ -15,9 +16,16 @@ const Workspace: FC<IProps> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <Base>
-        {!['/sign_in', '/sign_up', '/'].includes(pathname) && <Header />}
-        {/*<Navigation  />*/}
-        <div>{children}</div>
+        {!['/sign_in', '/sign_up', '/'].includes(pathname) && (
+          <>
+            <Header />
+            <div className={'container'}>
+              <Navigation />
+              <Main>{children}</Main>
+              <div>...</div>
+            </div>
+          </>
+        )}
       </Base>
     </ThemeProvider>
   );

@@ -3,10 +3,13 @@ import styled from '@emotion/styled';
 import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ToggleButton from '@components/Header/ToggleButton';
+import PingButton from '@components/Header/CreatePostModal/PingButton';
 
 interface IProps {
   register: any;
   isValue: boolean;
+  location: string;
+  onClick: any;
 }
 
 export const Base = styled.div`
@@ -14,6 +17,7 @@ export const Base = styled.div`
   display: flex;
   align-items: center;
   padding: 10px 20px;
+  height: 70px;
 
   > .avatar {
     > a {
@@ -36,7 +40,7 @@ export const Base = styled.div`
   }
 
   > .detail {
-    margin-left: 10px;
+    margin: 0 14px 0 10px;
 
     > .nickname {
       font-size: 15px;
@@ -45,7 +49,7 @@ export const Base = styled.div`
   }
 `;
 
-const UserInfoHeader = ({ register, isValue }: IProps) => {
+const UserInfoHeader = ({ register, isValue, location, onClick }: IProps) => {
   const userData = { id: 1, nickname: 'example', email: 'example@gmail.com' };
   return (
     <Base>
@@ -58,6 +62,7 @@ const UserInfoHeader = ({ register, isValue }: IProps) => {
         <span className={'nickname'}>{userData.nickname}</span>
         <ToggleButton register={register} isValue={isValue} />
       </div>
+      <PingButton location={location} onClick={onClick} />
     </Base>
   );
 };

@@ -18,7 +18,7 @@ const ModalBase = styled.div`
   z-index: 5000;
 `;
 
-const Menu: FC<IProps> = ({ children, show, onCloseModal, style }) => {
+const Modal: FC<IProps> = ({ children, show, onCloseModal, style }) => {
   const stopPropagation = useCallback((e: any) => {
     e.stopPropagation();
   }, []);
@@ -32,4 +32,4 @@ const Menu: FC<IProps> = ({ children, show, onCloseModal, style }) => {
   );
 };
 
-export default Menu;
+export default Modal;

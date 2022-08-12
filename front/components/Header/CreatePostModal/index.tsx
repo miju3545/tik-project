@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Modal from '@components/Modal';
 import ModalContent from '@components/Header/ModalContent';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -23,14 +23,9 @@ interface IProps {
 }
 
 type IFile = {
-  destination: string;
-  encoding: string;
-  fieldname: string;
-  filename: string;
-  mimetype: string;
-  originalname: string;
-  path: string;
+  name: string;
   size: number;
+  type: string;
 };
 
 interface IForm {
@@ -61,7 +56,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     defaultValues: {
       content: '',
       files: [],
-      location: 'Gangnam',
+      location: '강남역 4번 출구',
       // hashtag: null,
       mention: null,
       isPublic: true,
@@ -86,6 +81,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     isMentionSelected: false,
     isLocationSelected: true,
   });
+
+  const labelHeight = useMemo(() => ({ top: '-35px' }), []);
   const onClickOption = useCallback((optionItem: string) => {
     setShowModal((prev) => {
       let flag = 0;
@@ -110,7 +107,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
     });
   }, []);
 
-  const onSubmit = useCallback((data: IForm, files: IFile[]) => {
+  const onSubmit = useCallback((data: IForm, files: any[]) => {
     const formData = new FormData();
     // 타입 별로 다른 루트 탈 수 있게 수정할 것!
 
@@ -120,11 +117,9 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
       }
     }
 
-    for (const file in files) {
+    for (const file of files) {
       formData.append('files', file);
     }
-
-    console.log(formData);
 
     axios
       .post('/api/post', formData, {
@@ -138,7 +133,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
 
   const onClose = useCallback((data) => {
     onCloseModal();
-    if (data.content || data.imageOrVideoFiles.length >= 1 || data.mention)
+    if (data.content || files.length >= 1 || data.mention)
       setShowModal((prev) => ({ ...prev, showContinueMessageModal: true }));
   }, []);
 
@@ -156,9 +151,10 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
         });
       }),
     );
+
     setFiles((prev) => [...prev, ...e.target.files]);
 
-    if (previewImages.length) {
+    if (previewImages.length >= 1) {
       setShowModal((prev) => ({
         ...prev,
         showImageOrVideoDropper: false,
@@ -170,25 +166,31 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
 
       setTimeout(() => {
         setShowModal((prev) => ({ ...prev, showMentionMessageModal: false }));
-      }, 3000);
+      }, 2000);
     }
   }, []);
 
   return (
     <>
-      <Modal show={true} onCloseModal={() => onClose(inputValues)}>
+      <Modal show={show} onCloseModal={() => onClose(inputValues)}>
         <ModalContent
           title={'게시물 만들기'}
           show={showModal.showDefaultScreen}
           onCloseModal={() => onClose(inputValues)}
         >
-          <UserInfoHeader register={register('isPublic')} isValue={Boolean(inputValues.isPublic)} />
+          <UserInfoHeader
+            register={register('isPublic')}
+            isValue={Boolean(inputValues.isPublic)}
+            location={inputValues.location}
+            onClick={() => onClickOption('showLocationDropper')}
+          />
           <FormContainer>
             <Form onSubmit={handleSubmit(() => onSubmit(inputValues, files))}>
-              <InputBox>
-                <textarea {...register('content')} placeholder={`${userData.nickname}님, 무슨 생각을 하고 계신가요?`} />
+              <InputBox isInputValues={Boolean(inputValues.content) || files?.length >= 1}>
+                <textarea {...register('content')} placeholder={`${userData.nickname}님의 장소를 공유해 보세요`} />
                 <div className={'dropper'}>
                   <ImageVideoDropper
+                    // 이 files register 대신 useState files 를 쓰기 때문에 불필요 refactoring 필요
                     register={register('files', { onChange: onChangeFiles, value: files })}
                     show={showModal.showImageOrVideoDropper}
                     onCloseModal={() => {
@@ -220,14 +222,14 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                 <ul>
                   <HoverLabel
                     label={'사진/동영상'}
-                    style={{ top: '-38px' }}
+                    style={labelHeight}
                     onClick={() => onClickOption('showImageOrVideoDropper')}
                     children={
                       <ToolItem
                         style={{
                           color: '#44bd63',
                           backgroundColor:
-                            showModal.isImageOrVideoSelected || inputValues.files.length >= 1
+                            showModal.isImageOrVideoSelected || inputValues.files?.length >= 1
                               ? '#e3f0d4'
                               : 'transparent',
                         }}
@@ -238,7 +240,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                   />
                   <HoverLabel
                     label={'사람 태그하기'}
-                    style={{ top: '-38px' }}
+                    style={labelHeight}
                     onClick={() => onClickOption('showMentionDropper')}
                     children={
                       <ToolItem
@@ -254,7 +256,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                   />
                   <HoverLabel
                     label={'위치 공유하기'}
-                    style={{ top: '-38px' }}
+                    style={labelHeight}
                     onClick={() => onClickOption('showLocationDropper')}
                     children={
                       <ToolItem
@@ -269,9 +271,7 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
                   />
                 </ul>
               </ToolBox>
-              <Button disabled={!inputValues.content && inputValues.files.length < 1 && !inputValues.mention}>
-                공유하기
-              </Button>
+              <Button disabled={!inputValues.content && files?.length < 1 && !inputValues.mention}>공유하기</Button>
             </Form>
           </FormContainer>
         </ModalContent>

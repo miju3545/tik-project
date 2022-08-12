@@ -6,6 +6,8 @@ export const HeaderBase = styled.header<{ theme: any }>`
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 20px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   padding: 0 20px;
+  position: fixed;
+  z-index: 3000;
   > ul {
     width: 100%;
     height: 100%;

@@ -2,11 +2,12 @@ import React, { FC, useCallback, useState } from 'react';
 import Menu from '@components/Menu';
 import MenuItem from '@components/Header/MenuItem';
 import { BsPencilSquare, BsCameraVideoFill } from 'react-icons/bs';
-import { RiBookOpenFill } from 'react-icons/ri';
+import { RiBookOpenFill, RiStickyNoteFill } from 'react-icons/ri';
 import MenuContent from '@components/Header/MenuContent';
 import { Header } from '@components/Header/MenuContent/style';
 import CreatePostModal from '@components/Header/CreatePostModal';
 import { SideMenu } from '@components/Header/MenuModal/style';
+import CreateMemoModal from '@components/Header/CreateMemoModal';
 
 interface IProps {
   show: boolean | { [key: string]: any }[];
@@ -18,7 +19,13 @@ interface IState {
 }
 
 const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
-  const [showModal, setShowModal] = useState<IState>({ showCreatePostModal: false });
+  const userData = { id: 1, nickname: 'example', email: 'example@gmail.com' };
+  const [showModal, setShowModal] = useState<IState>({
+    showCreatePostModal: false,
+    showCreateMemoModal: false,
+    showCreateReelsModal: false,
+    showCreateRoomsModal: false,
+  });
   const onClickModal = useCallback((modalName: string) => {
     onCloseModal();
     setShowModal((prev) => {
@@ -49,11 +56,19 @@ const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
               />
               <MenuItem url="/" icon={<RiBookOpenFill />} title={'스토리'} />
               <MenuItem url="/" icon={<BsCameraVideoFill />} title={'룸스'} />
+              <MenuItem
+                onClick={() => onClickModal('showCreateMemoModal')}
+                icon={<RiStickyNoteFill />}
+                title={'메모'}
+              />
             </ul>
           </SideMenu>
         </MenuContent>
       </Menu>
       <CreatePostModal show={showModal.showCreatePostModal} onCloseModal={() => onClickModal('showCreatePostModal')} />
+      <CreateMemoModal show={showModal.showCreateMemoModal} onCloseModal={() => onClickModal('showCreateMemoModal')} />
+      {/*<CreateReelsModal show={showModal.showCreateReelsModal} onCloseModal={() => onClickModal('showCreateReelsModal')} />*/}
+      {/*<CreateRoomModal show={showModal.showCreateRoomModal} onCloseModal={() => onClickModal('showCreateRoomModal')} />*/}
     </>
   );
 };

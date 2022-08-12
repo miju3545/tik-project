@@ -10,7 +10,7 @@ interface IProps {
 
 export const Base = styled.div`
   width: 100%;
-  height: 200px;
+  height: 160px;
   border: 1px solid #dfdfdf;
   border-radius: 4px;
   padding: 10px;

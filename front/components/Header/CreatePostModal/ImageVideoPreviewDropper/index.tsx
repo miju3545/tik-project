@@ -54,10 +54,10 @@ export const Base = styled.div`
     flex-wrap: wrap;
 
     > img {
-      //object-fit: cover;
+      object-fit: cover;
       max-width: 100%;
       min-width: 33.3%;
-      height: auto;
+      //height: auto;
     }
   }
 
@@ -115,7 +115,7 @@ export const ToolBox = styled.div`
 `;
 const ImageVideoPreviewDropper = ({ show, onCloseModal, register, previews }: IProps) => {
   if (!show) return null;
-  console.log('previews', previews);
+
   return (
     <Base>
       <button className="close-button" onClick={onCloseModal}>
