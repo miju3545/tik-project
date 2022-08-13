@@ -8,8 +8,8 @@ import PingButton from '@components/Header/CreatePostModal/PingButton';
 interface IProps {
   register: any;
   isValue: boolean;
-  location: string;
-  onClick: any;
+  location?: string;
+  onClick?: any;
 }
 
 export const Base = styled.div`
@@ -62,7 +62,7 @@ const UserInfoHeader = ({ register, isValue, location, onClick }: IProps) => {
         <span className={'nickname'}>{userData.nickname}</span>
         <ToggleButton register={register} isValue={isValue} />
       </div>
-      <PingButton location={location} onClick={onClick} />
+      {location && <PingButton location={location} onClick={onClick} />}
     </Base>
   );
 };

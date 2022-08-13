@@ -11,6 +11,10 @@ import Navigation from '@components/Navigation';
 const Home = loadable(() => import('@pages/Home'));
 const SignIn = loadable(() => import('@pages/SignIn'));
 const SignUp = loadable(() => import('@pages/SignUp'));
+const Profile = loadable(() => import('@pages/Profile'));
+const Friends = loadable(() => import('@pages/Friends'));
+const Groups = loadable(() => import('@pages/Groups'));
+const Memos = loadable(() => import('@pages/Memos'));
 
 const App = () => {
   return (
@@ -18,11 +22,14 @@ const App = () => {
       <BrowserRouter>
         <Workspace>
           <Switch>
-            <Route path={'/groups'} component={Home} />
-            <Route path={'/friends'} component={Home} />
-            <Route path={'/browse/clubs'} component={Home} />
             <Route path={'/sign_in'} component={SignIn} />
             <Route path={'/sign_up'} component={SignUp} />
+            <Route path={'/friends'} component={Home} />
+            <Route path={'/browse/clubs'} component={Home} />
+            <Route path={`/:nickname/friends`} component={Friends} />
+            <Route path={`/:nickname/groups`} component={Groups} />
+            <Route path={`/:nickname/memos`} component={Memos} />
+            <Route path={`/:nickname`} component={Profile} />
           </Switch>
         </Workspace>
       </BrowserRouter>
