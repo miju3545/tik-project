@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Modal from '@components/Modal';
 import styled from '@emotion/styled';
+import AlarmModal from '@components/AlarmModal';
 
 interface IProps {
   show: boolean;
@@ -56,7 +57,7 @@ export const ModalContent = styled.div`
       }
     }
 
-    > button.denial {
+    > button.reject {
     }
     > button.accept {
       color: #1676f2;
@@ -82,22 +83,19 @@ const ContinueMessageModal = ({ show, onCloseModal, reset, setShowModal }: IProp
     });
   }, []);
   return (
-    <Modal show={show} onCloseModal={onCloseModal}>
-      <ModalContent>
-        <div className={'header'}>
-          <h1 className={'title'}>작성중인 글이 있어요.</h1>
-          <span className={'sub-title'}>이어서 작성하시겠어요?</span>
-        </div>
-        <div className={'buttons'}>
-          <button onClick={onCloseModalWithNewStart} className={'denial'}>
-            아니요, 새로 작성할래요.
-          </button>
-          <button onClick={onCloseModal} className={'accept'}>
-            네, 이어서 작성할게요.
-          </button>
-        </div>
-      </ModalContent>
-    </Modal>
+    <AlarmModal
+      title={'작성중인 글이 있어요.'}
+      subTitle={'이어서 작성하시겠어요?'}
+      show={show}
+      onCloseModal={onCloseModal}
+    >
+      <button onClick={onCloseModalWithNewStart} className={'denial'}>
+        아니요, 새로 작성할래요.
+      </button>
+      <button onClick={onCloseModal} className={'accept'}>
+        네, 이어서 작성할게요.
+      </button>
+    </AlarmModal>
   );
 };
 

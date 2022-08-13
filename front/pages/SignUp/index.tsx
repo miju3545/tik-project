@@ -4,8 +4,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Input from '@components/Input';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '@emotion/react';
-import { Button, REG_EMAIL, REG_PHONE } from '@pages/Intro/SignIn';
-import { Base } from '@pages/Intro/SignIn';
+import { Button, REG_EMAIL, REG_PHONE } from '@pages/SignIn';
+import { Base } from '@pages/SignIn';
 import SocialLinks from '@components/SocialLinks';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -57,7 +57,7 @@ const SignUp = () => {
           <div className={'header'}>
             <h1>회원가입</h1>
             <span className={'link'}>
-              이미 회원이신가요? <Link to={'/sign_up'}>로그인</Link>
+              이미 회원이신가요? <Link to={'/sign_in'}>로그인</Link>
             </span>
           </div>
           <div className={'form-wrapper'}>

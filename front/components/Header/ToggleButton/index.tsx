@@ -10,7 +10,7 @@ export const Base = styled.label<{ [key: string]: any }>`
   > .outer-circle {
     width: 66px;
     height: 28px;
-    background-color: ${({ isValue }) => (isValue ? '#0295f6' : '#8e8e8e')};
+    background-color: ${({ isValue }) => (!isValue ? '#0295f6' : '#8e8e8e')};
     border-radius: 20px;
     cursor: pointer;
     position: relative;
@@ -23,7 +23,7 @@ export const Base = styled.label<{ [key: string]: any }>`
       top: 5px;
       font-weight: 500;
       opacity: 0.8;
-      ${({ isValue }) => (isValue ? 'left: 13px' : 'right: 7px')};
+      ${({ isValue }) => (!isValue ? 'left: 7px' : 'right: 13px')};
     }
     > .toggle-button {
       width: 22px;
@@ -31,7 +31,7 @@ export const Base = styled.label<{ [key: string]: any }>`
       border-radius: 50%;
       background-color: #fff;
       transition: 0.4s;
-      transform: ${({ isValue }) => (isValue ? 'translateX(38px)' : 0)};
+      transform: ${({ isValue }) => (!isValue ? 'translateX(38px)' : 0)};
     }
   }
 `;

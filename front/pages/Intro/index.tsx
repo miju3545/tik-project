@@ -3,8 +3,8 @@ import styled from '@emotion/styled';
 import { Route, Switch } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-const SignIn = loadable(() => import('@pages/Intro/SignIn'));
-const SignUp = loadable(() => import('@pages/Intro/SignUp'));
+const SignIn = loadable(() => import('@pages/SignIn'));
+const SignUp = loadable(() => import('@pages/SignUp'));
 
 export const Base = styled.div``;
 
