@@ -14,6 +14,7 @@ export const MenuItemBase = styled.li`
     padding: 10px;
     background-color: transparent;
     border: none;
+    cursor: pointer;
     > .icon {
       margin-right: 10px;
       width: 38px;
@@ -37,5 +38,3 @@ export const MenuItemBase = styled.li`
     background-color: rgb(239, 239, 239);
   }
 `;
-
-export const LogoutButton = styled(MenuItemBase)``;

@@ -4,6 +4,7 @@ import ModalContent from '@components/Header/ModalContent';
 import UserInfoHeader from '@components/Header/CreatePostModal/UserInfoHeader';
 import { useForm } from 'react-hook-form';
 import { Button, Form, FormContainer, InputBox } from '@components/Header/CreatePostModal/style';
+import TextArea from '@components/TextArea';
 
 interface IProps {
   show: boolean;
@@ -29,9 +30,10 @@ const CreateMemoModal = ({ show, onCloseModal }: IProps) => {
         <UserInfoHeader register={register('isPublic')} isValue={Boolean(inputValues.isPublic)} />
         <FormContainer>
           <Form>
-            <InputBox isInputValues={Boolean(inputValues.content)}>
-              <textarea
-                {...register('content')}
+            <InputBox>
+              <TextArea
+                register={register('content')}
+                isValue={Boolean(inputValues.content)}
                 placeholder={`${userData.nickname}님, 지금 생각나는 것을 메모해 보세요.`}
               />
             </InputBox>

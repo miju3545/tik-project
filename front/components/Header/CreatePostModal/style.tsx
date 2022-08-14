@@ -10,32 +10,11 @@ export const Form = styled.form`
   width: 100%;
   height: 100%;
 `;
-export const InputBox = styled.div<{ [key: string]: any }>`
+export const InputBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-
-  > textarea {
-    width: 100%;
-    min-height: ${({ isInputValues }) => (isInputValues ? '80px' : '120px')};
-    resize: unset;
-    font-family: 'Poppins', sans-serif;
-    font-size: ${({ isInputValues }) => (isInputValues ? '16px' : '22px')};
-    border: none;
-    transition: 0.2s;
-
-    &::placeholder {
-      font-size: 22px;
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  > .dropper {
-  }
 `;
 
 export const ToolBox = styled.div`

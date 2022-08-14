@@ -5,8 +5,8 @@ import { Base, Header, Main } from '@components/Header/ModalContent/style';
 interface IProps {
   title: string;
   show: boolean;
-  children: React.ReactNode;
   onCloseModal: () => void;
+  children: React.ReactNode;
   style?: CSSProperties;
 }
 

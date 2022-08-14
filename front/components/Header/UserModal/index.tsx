@@ -10,6 +10,7 @@ import { FaUser } from 'react-icons/fa';
 import MenuContent from '@components/Header/MenuContent';
 import axios from 'axios';
 import { Header, ProfileInfo, MenuUl, BlueTextButton } from '@components/Header/UserModal/style';
+import { Redirect, useHistory } from 'react-router-dom';
 
 interface IProps {
   show: boolean;
@@ -22,15 +23,21 @@ const UserModal: FC<IProps> = ({ show, onCloseModal }) => {
   const onClickModal = useCallback((modalName: string) => {
     setShowModal((prev) => ({ ...prev, [modalName]: !prev[modalName] }));
   }, []);
+  const history = useHistory();
 
   const onLogout = useCallback(() => {
     axios
       .post('/api/user/logout')
       .then((res) => {
         console.log('logout success');
+        history.push('/sign_in');
       })
       .catch((error) => console.error(error));
   }, []);
+
+  // if (false) {
+  //   return <Redirect to={'/sign_in'} />;
+  // }
 
   return (
     <Menu show={show} onCloseModal={onCloseModal}>

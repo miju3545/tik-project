@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Base, Main } from '@layouts/Workspace/style';
 import Header from '@components/Header';
 import { ThemeContext, ThemeProvider } from '@emotion/react';
@@ -13,23 +13,18 @@ interface IProps {
 
 const Workspace: FC<IProps> = ({ children }) => {
   const { pathname } = useLocation();
+  console.log(useRouteMatch());
   return (
     <ThemeProvider theme={theme}>
       <Base>
-        {!['/sign_in', '/sign_up', '/'].includes(pathname) ? (
-          <>
-            <Header />
-            <div className={'container'}>
-              <div>
-                <Navigation />
-              </div>
-              <Main>{children}</Main>
-              <div>...</div>
-            </div>
-          </>
-        ) : (
+        <Header />
+        <div className={'container'}>
+          <div>
+            <Navigation />
+          </div>
           <Main>{children}</Main>
-        )}
+          <div>...</div>
+        </div>
       </Base>
     </ThemeProvider>
   );

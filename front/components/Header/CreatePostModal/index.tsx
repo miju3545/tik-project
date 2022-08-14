@@ -16,6 +16,7 @@ import { FormContainer, Form, ToolBox, InputBox, ToolItem, Button } from '@compo
 import axios from 'axios';
 import MentionMessageModal from '@components/Header/CreatePostModal/MentionMessageModal';
 import useInput from '@hooks/useInput';
+import TextArea from '@components/TextArea';
 
 interface IProps {
   show: boolean;
@@ -109,8 +110,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
 
   const onSubmit = useCallback((data: IForm, files: any[]) => {
     const formData = new FormData();
-    // 타입 별로 다른 루트 탈 수 있게 수정할 것!
 
+    // 타입 별로 다른 루트 탈 수 있게 수정할 것!
     for (const [key, value] of Object.entries(data)) {
       if (key !== 'files') {
         formData.append(key, value);
@@ -133,8 +134,9 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
 
   const onClose = useCallback((data) => {
     onCloseModal();
-    if (data.content || files.length >= 1 || data.mention)
+    if (data.content || files.length >= 1 || data.mention) {
       setShowModal((prev) => ({ ...prev, showContinueMessageModal: true }));
+    }
   }, []);
 
   const onChangeFiles = useCallback(async (e: any) => {
@@ -186,8 +188,12 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
           />
           <FormContainer>
             <Form onSubmit={handleSubmit(() => onSubmit(inputValues, files))}>
-              <InputBox isInputValues={Boolean(inputValues.content) || files?.length >= 1}>
-                <textarea {...register('content')} placeholder={`${userData.nickname}님의 장소를 공유해 보세요`} />
+              <InputBox>
+                <TextArea
+                  register={register('content')}
+                  isValue={Boolean(inputValues.content) || files?.length >= 1}
+                  placeholder={`${userData.nickname}님의 장소를 공유해 보세요`}
+                />
                 <div className={'dropper'}>
                   <ImageVideoDropper
                     // 이 files register 대신 useState files 를 쓰기 때문에 불필요 refactoring 필요
@@ -291,7 +297,11 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
           show={showModal.showContinueMessageModal}
           onCloseModal={() => onClickOption('showContinueMessageModal')}
           onClickOption={onClickOption}
-          reset={reset}
+          reset={() => {
+            reset();
+            setFiles([]);
+            setPreviews([]);
+          }}
           setShowModal={setShowModal}
         />
       </Modal>
