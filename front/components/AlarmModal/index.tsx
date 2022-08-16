@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import Modal from '@components/Modal';
-import { ModalContent } from '@components/Header/ContinueMessageModal';
+import { ModalContent } from '@components/Header/Modals/ContinueMessageModal';
 
 interface IProps {
   title: string;

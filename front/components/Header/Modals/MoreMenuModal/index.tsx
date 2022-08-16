@@ -5,9 +5,9 @@ import { BsPencilSquare, BsCameraVideoFill } from 'react-icons/bs';
 import { RiBookOpenFill, RiStickyNoteFill } from 'react-icons/ri';
 import MenuContent from '@components/Header/MenuContent';
 import { Header } from '@components/Header/MenuContent/style';
-import CreatePostModal from '@components/Header/CreatePostModal';
-import { SideMenu } from '@components/Header/MenuModal/style';
-import CreateMemoModal from '@components/Header/CreateMemoModal';
+import CreatePostModal from '@components/Header/Modals/CreatePostModal';
+import { SideMenu } from '@components/Header/Modals/MoreMenuModal/style';
+import CreateMemoModal from '@components/Header/Modals/CreateMemoModal';
 
 interface IProps {
   show: boolean | { [key: string]: any }[];

@@ -1,32 +1,37 @@
-import React, { FC } from 'react';
-import { BrowserRouter, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { Base, Main } from '@layouts/Workspace/style';
+import React, { VFC } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import { Base, LeftMenu, Main, RightMenu } from '@layouts/Workspace/style';
 import Header from '@components/Header';
-import { ThemeContext, ThemeProvider } from '@emotion/react';
-import { theme } from '@themes/themes';
 import { useLocation } from 'react-router';
 import Navigation from '@components/Navigation';
+import loadable from '@loadable/component';
 
-interface IProps {
-  children: React.ReactNode;
-}
+const Home = loadable(() => import('@pages/Home'));
+const Friends = loadable(() => import('@pages/Friends'));
+const Groups = loadable(() => import('@pages/Groups'));
+const Memos = loadable(() => import('@pages/Memos'));
 
-const Workspace: FC<IProps> = ({ children }) => {
-  const { pathname } = useLocation();
-  console.log(useRouteMatch());
+const Workspace: VFC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Base>
-        <Header />
-        <div className={'container'}>
-          <div>
-            <Navigation />
-          </div>
-          <Main>{children}</Main>
-          <div>...</div>
-        </div>
-      </Base>
-    </ThemeProvider>
+    <Base>
+      <Header />
+      <div id={'main-container'}>
+        <LeftMenu>
+          <Navigation />
+        </LeftMenu>
+        <Main>
+          <Switch>
+            <Route path={'/browse/clubs'} component={Home} />
+            <Route path={'/:nickname/friends'} component={Friends} />
+            <Route path={'/:nickname/groups'} component={Groups} />
+            <Route path={'/:nickname/memos'} component={Memos} />
+            <Route path={'/:nickname/clubs'} component={Memos} />
+            <Route path={'/'} component={Home} />
+          </Switch>
+        </Main>
+        <RightMenu>오른쪽 메뉴</RightMenu>
+      </div>
+    </Base>
   );
 };
 

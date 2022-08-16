@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ToggleButton from '@components/Header/ToggleButton';
-import PingButton from '@components/Header/CreatePostModal/PingButton';
+import PingButton from '@components/Header/Modals/CreatePostModal/PingButton';
 
 interface IProps {
   register: any;

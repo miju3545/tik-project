@@ -1,8 +1,8 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, FC } from 'react';
 import { useLocation } from 'react-router';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import { HeaderItemBase } from '@components/Header/HeaderItem/style';
+import { Base } from '@components/Header/MidMenuItem/style';
 
 interface IProps {
   content: { outline: React.ReactNode; fill: React.ReactNode };
@@ -10,13 +10,13 @@ interface IProps {
   url: string;
 }
 
-const HeaderItem = ({ content, url, style }: IProps) => {
+const HeaderItem: FC<IProps> = ({ content, url, style }) => {
   const { pathname } = useLocation();
   const theme = useTheme();
   return (
-    <HeaderItemBase theme={theme} active={pathname === url}>
+    <Base theme={theme} active={pathname === url} style={style}>
       <Link to={url}>{pathname === url ? content.fill : content.outline}</Link>
-    </HeaderItemBase>
+    </Base>
   );
 };
 

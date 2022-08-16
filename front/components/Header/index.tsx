@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import ActionItem from '@components/ActionItem';
 import HoverLabel from '@components/HoverLabel';
 import { IoSearchOutline } from 'react-icons/io5';
@@ -10,40 +9,38 @@ import { BsGrid3X3GapFill } from 'react-icons/bs';
 import { RiChatSmile2Fill } from 'react-icons/ri';
 import { HiBell, HiOutlineUserGroup, HiUserGroup, HiOutlineUsers, HiUsers } from 'react-icons/hi';
 import { FaUser } from 'react-icons/fa';
-import HeaderItem from '@components/Header/HeaderItem';
-import MenuModal from '@components/Header/MenuModal';
-import MessageModal from '@components/Header/MessageModal';
-import UserModal from '@components/Header/UserModal';
-import { HeaderBase } from '@components/Header/style';
+import MidMenuItem from '@components/Header/MidMenuItem';
+import MoreMenuModal from '@components/Header/Modals/MoreMenuModal';
+import ChatMenuModal from '@components/Header/Modals/ChatMenuModal';
+import UserMenuModal from '@components/Header/Modals/UserMenuModal';
+import { Base } from '@components/Header/style';
 
 interface IModalState {
   [key: string]: any;
 }
+
 const Header = () => {
   const theme = useTheme();
   const [showModal, setShowModal] = useState<IModalState>({
-    showMenuModal: false,
-    showMessageModal: false,
-    showUserModal: false,
+    showMoreMenuModal: false,
+    showChatMenuModal: false,
+    showUserMenuModal: false,
   });
-  // 자신 빼고 다 false
+
   const onClickActionItem = useCallback((modalName: string) => {
     setShowModal((prev) => {
       for (let v in prev) {
-        if (v !== modalName) {
-          prev[v] = false;
-        } else {
-          prev[v] = !prev[v];
-        }
+        prev[v] = v !== modalName ? false : !prev[v];
       }
+
       return { ...prev };
     });
   }, []);
 
   return (
-    <HeaderBase theme={theme}>
+    <Base theme={theme}>
       <ul>
-        <li className={'first-action-items'}>
+        <li className={'left-menu'}>
           <Link to={'/browse/clubs'}>
             <ActionItem
               content={<RiChatSmile2Fill />}
@@ -52,46 +49,50 @@ const Header = () => {
           </Link>
           <HoverLabel label={'검색'} children={<ActionItem content={<IoSearchOutline />} />} />
         </li>
-        <li className={'mid-action-items'}>
+        <li className={'mid-menu'}>
           <HoverLabel
             label={'홈'}
-            children={<HeaderItem url="/browse/clubs" content={{ outline: <AiOutlineHome />, fill: <AiFillHome /> }} />}
+            children={
+              <MidMenuItem url="/browse/clubs" content={{ outline: <AiOutlineHome />, fill: <AiFillHome /> }} />
+            }
             style={{ top: '60px' }}
           />
           <HoverLabel
             label={'친구'}
-            children={<HeaderItem url="/friends" content={{ outline: <HiOutlineUsers />, fill: <HiUsers /> }} />}
+            children={<MidMenuItem url="/friends" content={{ outline: <HiOutlineUsers />, fill: <HiUsers /> }} />}
             style={{ top: '60px' }}
           />
           <HoverLabel
             label={'그룹'}
-            children={<HeaderItem url="/groups" content={{ outline: <HiOutlineUserGroup />, fill: <HiUserGroup /> }} />}
+            children={
+              <MidMenuItem url="/groups" content={{ outline: <HiOutlineUserGroup />, fill: <HiUserGroup /> }} />
+            }
             style={{ top: '60px' }}
           />
         </li>
-        <li className={'last-action-items'}>
+        <li className={'right-menu'}>
           <HoverLabel
-            onClick={() => onClickActionItem('showMenuModal')}
+            onClick={() => onClickActionItem('showMoreMenuModal')}
             label={'메뉴'}
-            children={<ActionItem content={<BsGrid3X3GapFill />} active={showModal.showMenuModal} />}
+            children={<ActionItem content={<BsGrid3X3GapFill />} active={showModal.showMoreMenuModal} />}
           />
           <HoverLabel
-            onClick={() => onClickActionItem('showMessageModal')}
+            onClick={() => onClickActionItem('showChatMenuModal')}
             label={'메신저'}
             children={<ActionItem content={<AiFillMessage />} />}
           />
           <HoverLabel label={'알림'} children={<ActionItem content={<HiBell />} />} />
           <HoverLabel
-            onClick={() => onClickActionItem('showUserModal')}
+            onClick={() => onClickActionItem('showUserMenuModal')}
             label={'계정'}
             children={<ActionItem content={<FaUser />} />}
           />
         </li>
       </ul>
-      <MenuModal show={showModal.showMenuModal} onCloseModal={() => onClickActionItem('showMenuModal')} />
-      <MessageModal show={showModal.showMessageModal} onCloseModal={() => onClickActionItem('showMessageModal')} />
-      <UserModal show={showModal.showUserModal} onCloseModal={() => onClickActionItem('showUserModal')} />
-    </HeaderBase>
+      <MoreMenuModal show={showModal.showMoreMenuModal} onCloseModal={() => onClickActionItem('showMoreMenuModal')} />
+      <ChatMenuModal show={showModal.showChatMenuModal} onCloseModal={() => onClickActionItem('showChatMenuModal')} />
+      <UserMenuModal show={showModal.showUserMenuModal} onCloseModal={() => onClickActionItem('showUserMenuModal')} />
+    </Base>
   );
 };
 

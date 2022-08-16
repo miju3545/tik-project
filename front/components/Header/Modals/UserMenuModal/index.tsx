@@ -9,7 +9,7 @@ import { MdNightlight, MdEmojiEmotions } from 'react-icons/md';
 import { FaUser } from 'react-icons/fa';
 import MenuContent from '@components/Header/MenuContent';
 import axios from 'axios';
-import { Header, ProfileInfo, MenuUl, BlueTextButton } from '@components/Header/UserModal/style';
+import { Header, ProfileInfo, MenuUl, BlueTextButton } from '@components/Header/Modals/UserMenuModal/style';
 import { Redirect, useHistory } from 'react-router-dom';
 
 interface IProps {

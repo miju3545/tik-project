@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Modal from '@components/Modal';
 import ModalContent from '@components/Header/ModalContent';
-import UserInfoHeader from '@components/Header/CreatePostModal/UserInfoHeader';
+import UserInfoHeader from '@components/Header/Modals/CreatePostModal/UserInfoHeader';
 import { useForm } from 'react-hook-form';
-import { Button, Form, FormContainer, InputBox } from '@components/Header/CreatePostModal/style';
+import { Button, Form, FormContainer, InputBox } from '@components/Header/Modals/CreatePostModal/style';
 import TextArea from '@components/TextArea';
 
 interface IProps {

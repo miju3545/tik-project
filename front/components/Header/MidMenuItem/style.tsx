@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const HeaderItemBase = styled.div<{ [key: string]: any }>`
+export const Base = styled.div<{ [key: string]: any }>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -20,7 +20,8 @@ export const HeaderItemBase = styled.div<{ [key: string]: any }>`
 
     > svg {
       font-size: 26px;
-      color: ${({ theme, active }) => (active ? theme.colors.blue[600] : theme.colors.gray[900])};
+      font-weight: 400;
+      color: ${({ theme, active }) => (active ? theme.colors.blue[600] : '#65676b')};
     }
 
     &:hover {

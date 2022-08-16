@@ -6,15 +6,22 @@ import { BsImages } from 'react-icons/bs';
 import { FaUserTag } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
 import HoverLabel from '@components/HoverLabel';
-import UserInfoHeader from '@components/Header/CreatePostModal/UserInfoHeader';
-import ImageVideoDropper from '@components/Header/CreatePostModal/ImageVideoDropper';
-import LocationDropper from '@components/Header/CreatePostModal/LocationDropper';
-import MentionDropper from '@components/Header/CreatePostModal/MentionDropper';
-import ContinueMessageModal from '@components/Header/ContinueMessageModal';
-import ImageVideoPreviewDropper from '@components/Header/CreatePostModal/ImageVideoPreviewDropper';
-import { FormContainer, Form, ToolBox, InputBox, ToolItem, Button } from '@components/Header/CreatePostModal/style';
+import UserInfoHeader from '@components/Header/Modals/CreatePostModal/UserInfoHeader';
+import ImageVideoDropper from '@components/Header/Modals/CreatePostModal/ImageVideoDropper';
+import LocationDropper from '@components/Header/Modals/CreatePostModal/LocationDropper';
+import MentionDropper from '@components/Header/Modals/CreatePostModal/MentionDropper';
+import ContinueMessageModal from '@components/Header/Modals/ContinueMessageModal';
+import ImageVideoPreviewDropper from '@components/Header/Modals/CreatePostModal/ImageVideoPreviewDropper';
+import {
+  FormContainer,
+  Form,
+  ToolBox,
+  InputBox,
+  ToolItem,
+  Button,
+} from '@components/Header/Modals/CreatePostModal/style';
 import axios from 'axios';
-import MentionMessageModal from '@components/Header/CreatePostModal/MentionMessageModal';
+import MentionMessageModal from '@components/Header/Modals/CreatePostModal/MentionMessageModal';
 import useInput from '@hooks/useInput';
 import TextArea from '@components/TextArea';
 

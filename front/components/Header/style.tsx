@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const HeaderBase = styled.header<{ theme: any }>`
+export const Base = styled.header<{ theme: any }>`
   width: 100%;
   height: 58px;
   background-color: #fff;
@@ -23,18 +23,18 @@ export const HeaderBase = styled.header<{ theme: any }>`
       align-items: center;
     }
 
-    > li.first-action-items {
+    > li.left-menu {
       > a {
         margin-right: 10px;
       }
     }
-    > li.mid-action-items {
+    > li.mid-menu {
       > div {
         display: block;
         width: 33.3%;
       }
     }
-    > li.last-action-items {
+    > li.right-menu {
       justify-content: flex-end;
       > div {
         margin-left: 10px;
