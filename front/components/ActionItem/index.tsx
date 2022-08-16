@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const ActionItemBase = styled.div<{ [key: string]: any }>`
+export const Base = styled.div<{ [key: string]: any }>`
   width: 41px;
   height: 41px;
   border-radius: 50%;
@@ -30,9 +30,9 @@ const ActionItem = ({ content, style, active, rest }: IProps) => {
   const theme = useTheme();
 
   return (
-    <ActionItemBase theme={theme} style={style} active={active} {...rest}>
+    <Base theme={theme} style={style} active={active} {...rest}>
       {content}
-    </ActionItemBase>
+    </Base>
   );
 };
 

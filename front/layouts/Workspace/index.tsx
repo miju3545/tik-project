@@ -26,7 +26,6 @@ const Workspace: VFC = () => {
             <Route path={'/:nickname/groups'} component={Groups} />
             <Route path={'/:nickname/memos'} component={Memos} />
             <Route path={'/:nickname/clubs'} component={Memos} />
-            <Route path={'/'} component={Home} />
           </Switch>
         </Main>
         <RightMenu>오른쪽 메뉴</RightMenu>

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import styled from '@emotion/styled';
 import MenuItem from '@components/Header/MenuItem';
+import { AiFillMessage } from 'react-icons/ai';
 
 export const Base = styled.nav`
   padding: 10px;
-
   > ul {
     position: fixed;
     //float: left;
@@ -33,7 +33,8 @@ const Navigation = () => {
         <MenuItem icon={''} title={'이벤트'} />
         <MenuItem icon={''} title={'최신'} />
         <MenuItem icon={''} title={'즐겨찾기'} />
-        <MenuItem icon={''} title={'메모장'} />
+        <MenuItem icon={'/memos'} title={'메모장'} />
+        <MenuItem url={'/dm'} icon={<AiFillMessage />} title={'채팅'} />
       </ul>
     </Base>
   );

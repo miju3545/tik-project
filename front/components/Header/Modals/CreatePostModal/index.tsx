@@ -154,8 +154,8 @@ const CreatePostModal = ({ show, onCloseModal }: IProps) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
             fileReader.onload = (e: any) => resolve({ fileName: file.name, src: e.target.result });
-          } catch (error) {
-            reject(error);
+          } catch (err) {
+            reject(err);
           }
         });
       }),
