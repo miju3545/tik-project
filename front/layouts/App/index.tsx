@@ -21,6 +21,7 @@ const App = () => {
             <Route path={'/sign_up'} component={SignUp} />
             <Route path={`/profile/:nickname`} component={Profile} />
             <Route path={'/dm'} component={Dm} />
+            <Route path={'/dm/:id'} component={Dm} />
             <Route path={'/'} component={Workspace} />
           </Switch>
         </BrowserRouter>

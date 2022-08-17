@@ -10,9 +10,11 @@ interface IProps {
 const ModalContent: FC<IProps> = ({ children, style, title }) => {
   return (
     <Base style={style}>
-      <Header>
-        <h1>{title}</h1>
-      </Header>
+      {title && (
+        <Header>
+          <h1>{title}</h1>
+        </Header>
+      )}
       <Main>{children}</Main>
     </Base>
   );

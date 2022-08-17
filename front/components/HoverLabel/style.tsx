@@ -5,11 +5,11 @@ export const HoverLabelBase = styled.div`
   z-index: 4000;
 
   > .target:hover + .hover-label {
-    opacity: 1;
+    display: block;
   }
 
   > .hover-label {
-    opacity: 0;
+    display: none;
     position: absolute;
     top: 44px;
     left: 50%;

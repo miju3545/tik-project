@@ -15,7 +15,7 @@ const Base = styled.div`
   left: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.8);
-  z-index: 5000;
+  z-index: 4000;
 `;
 
 const Modal: FC<IProps> = ({ children, show, onCloseModal, style }) => {

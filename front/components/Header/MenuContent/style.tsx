@@ -5,10 +5,10 @@ export const Base = styled.div`
   top: 60px;
   right: 20px;
   width: 500px;
-  background-color: #fff;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 12px;
+  background-color: #f6f8fa;
 `;
 
 export const Header = styled.div`

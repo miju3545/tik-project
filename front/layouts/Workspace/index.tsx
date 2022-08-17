@@ -1,5 +1,5 @@
 import React, { VFC } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useParams } from 'react-router-dom';
 import { Base, LeftMenu, Main, RightMenu } from '@layouts/Workspace/style';
 import Header from '@components/Header';
 import { useLocation } from 'react-router';
@@ -10,8 +10,10 @@ const Home = loadable(() => import('@pages/Home'));
 const Friends = loadable(() => import('@pages/Friends'));
 const Groups = loadable(() => import('@pages/Groups'));
 const Memos = loadable(() => import('@pages/Memos'));
+const Dm = loadable(() => import('@pages/Dm'));
 
 const Workspace: VFC = () => {
+  console.log(useParams());
   return (
     <Base>
       <Header />
