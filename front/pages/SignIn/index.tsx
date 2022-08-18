@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
 import { Link, Redirect } from 'react-router-dom';
-import Input from '@components/Input';
+import Input from '@components/Inputs/Input';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '@emotion/react';
 import SocialLinks from '@components/SocialLinks';

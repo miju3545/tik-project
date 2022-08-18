@@ -4,7 +4,9 @@ import { useTheme } from '@emotion/react';
 import { BsSearch } from 'react-icons/bs';
 
 interface IProps {
-  register: any;
+  value?: string;
+  setValue?: React.SetStateAction<any>;
+  register?: any;
   placeholder: string;
   showIcon?: boolean;
   style?: CSSProperties;
@@ -50,8 +52,9 @@ export const SearchBar = styled.label<{ [key: string]: any }>`
   }
 `;
 
-const SearchForm = ({ register, placeholder, showIcon = true, style }: IProps) => {
+const SearchInput = ({ value, setValue, register, placeholder, showIcon = true, style }: IProps) => {
   const theme = useTheme();
+
   return (
     <Base>
       <SearchBar theme={theme}>
@@ -60,11 +63,22 @@ const SearchForm = ({ register, placeholder, showIcon = true, style }: IProps) =
             <BsSearch />
           </span>
         )}
-        <input type={'text'} {...register} placeholder={placeholder} autoFocus={true} style={style} />
+        {register ? (
+          <input type={'text'} {...register} placeholder={placeholder} autoFocus={true} style={style} />
+        ) : (
+          <input
+            type={'text'}
+            value={value}
+            onChange={(e: any) => setValue(e.target.value)}
+            placeholder={placeholder}
+            autoFocus={true}
+            style={style}
+          />
+        )}
       </SearchBar>
       <button type={'submit'} hidden></button>
     </Base>
   );
 };
 
-export default SearchForm;
+export default SearchInput;

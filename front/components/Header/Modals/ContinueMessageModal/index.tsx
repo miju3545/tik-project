@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Modal from '@components/Modal';
 import styled from '@emotion/styled';
-import AlarmModal from '@components/AlarmModal';
+import AlertModal from '@components/AlertModal';
 
 interface IProps {
   show: boolean;
@@ -83,7 +83,7 @@ const ContinueMessageModal = ({ show, onCloseModal, reset, setShowModal }: IProp
     });
   }, []);
   return (
-    <AlarmModal
+    <AlertModal
       title={'작성중인 글이 있어요.'}
       subTitle={'이어서 작성하시겠어요?'}
       show={show}
@@ -95,7 +95,7 @@ const ContinueMessageModal = ({ show, onCloseModal, reset, setShowModal }: IProp
       <button onClick={onCloseModal} className={'accept'}>
         네, 이어서 작성할게요.
       </button>
-    </AlarmModal>
+    </AlertModal>
   );
 };
 

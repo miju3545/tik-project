@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useTheme } from '@emotion/react';
-import SearchForm from '@components/SearchForm';
+import SearchForm from '@components/Inputs/SearchInput';
 
 interface IProps {
   register?: any;

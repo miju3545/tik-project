@@ -15,8 +15,9 @@ import { SideMenu } from '@components/Header/Modals/MoreMenuModal/style';
 import CreateMemoModal from '@components/Header/Modals/CreateMemoModal';
 import SearchResultModal from '@components/ChatComps/ChatsMenu/SearchResultModal';
 import { useForm } from 'react-hook-form';
-import SearchForm from '@components/SearchForm';
+import SearchForm from '@components/Inputs/SearchInput';
 import styled from '@emotion/styled';
+import CreateClubModal from '@components/Header/Modals/CreateClubModal';
 
 interface IProps {
   show: boolean | { [key: string]: any }[];
@@ -39,22 +40,18 @@ const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
   const userData = { id: 1, nickname: 'example', email: 'example@gmail.com' };
   const { register, handleSubmit, watch, reset } = useForm<IForm>({ defaultValues: { query: '' }, mode: 'onChange' });
   const [showModals, setShowModals] = useState<IState>({
+    showCreateClubModal: false,
     showCreatePostModal: false,
     showCreateMemoModal: false,
     showCreateReelsModal: false,
     showCreateRoomsModal: false,
     showSearchResultModal: true,
   });
+
   const handleModal = useCallback((modalName: string) => {
     onCloseModal();
     setShowModals((prev) => {
-      for (let v in prev) {
-        if (v !== modalName) {
-          prev[v] = false;
-        } else {
-          prev[v] = !prev[v];
-        }
-      }
+      for (let v in prev) prev[v] = v !== modalName ? false : !prev[v];
       return { ...prev };
     });
   }, []);
@@ -69,7 +66,7 @@ const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
         <MenuContent title={'메뉴'} style={{ width: '600px', minHeight: '900px' }}>
           <SideMenu style={{ left: '20px', top: '30px', width: '300px' }}>
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <SearchForm register={register('query')} placeholder={'메뉴 검색'} />
+              <SearchForm register={register('query')} placeholder={'메뉴 검색'} style={{ paddingLeft: 0 }} />
             </Form>
             <Header>
               <h2 style={{ fontSize: '17px', fontWeight: '600' }}>소셜</h2>
@@ -93,7 +90,7 @@ const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
               <h2>만들기</h2>
             </Header>
             <ul>
-              <MenuItem url="/" icon={<FaUsers />} title={'클럽'} />
+              <MenuItem onClick={() => handleModal('showCreateClubModal')} icon={<FaUsers />} title={'클럽'} />
               <MenuItem onClick={() => handleModal('showCreatePostModal')} icon={<BsPencilSquare />} title={'게시물'} />
               <MenuItem url="/" icon={<RiBookOpenFill />} title={'스토리'} />
               <MenuItem url="/" icon={<BsCameraVideoFill />} title={'룸스'} />
@@ -102,6 +99,7 @@ const MenuModal: FC<IProps> = ({ show, onCloseModal }) => {
           </SideMenu>
         </MenuContent>
       </Menu>
+      <CreateClubModal show={showModals.showCreateClubModal} onCloseModal={() => handleModal('showCreateClubModal')} />
       <CreatePostModal show={showModals.showCreatePostModal} onCloseModal={() => handleModal('showCreatePostModal')} />
       <CreateMemoModal show={showModals.showCreateMemoModal} onCloseModal={() => handleModal('showCreateMemoModal')} />
       {/*<CreateReelsModal show={showModal.showCreateReelsModal} onCloseModal={() => handleModal('showCreateReelsModal')} />*/}

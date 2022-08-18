@@ -1,5 +1,5 @@
 import React from 'react';
-import AlarmModal from '@components/AlarmModal';
+import AlertModal from '@components/AlertModal';
 
 interface IProps {
   show: boolean;
@@ -8,14 +8,14 @@ interface IProps {
 
 const SignUpSuccessModal = ({ show, onCloseModal }: IProps) => {
   return (
-    <AlarmModal title={'가입을 축하합니다'} subTitle={'바로 로그인하시겠어요?'} show={show} onCloseModal={onCloseModal}>
+    <AlertModal title={'가입을 축하합니다'} subTitle={'바로 로그인하시겠어요?'} show={show} onCloseModal={onCloseModal}>
       <button onClick={onCloseModal} className={'refuse'}>
         아니요
       </button>
       <button onClick={onCloseModal} className={'accept'}>
         네
       </button>
-    </AlarmModal>
+    </AlertModal>
   );
 };
 export default SignUpSuccessModal;
