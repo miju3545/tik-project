@@ -1,59 +1,50 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import { useTheme } from '@emotion/react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { IoMdSend } from 'react-icons/io';
+import { ChatArea, Form, Toolbox, SendButton, MentionsTextarea, EachMention } from './style';
+import autosize from 'autosize';
 
 interface IProps {
   register: any;
+  onSubmit: () => void;
+  isValue: boolean;
+  placeholder?: string;
 }
 
-export const Base = styled.div<{ [key: string]: any }>`
-  width: 100%;
-  height: 18%;
-  padding: 10px 20px;
-
-  > .container {
-    width: 100%;
-    height: 100%;
-    //background-color: #f0f2f6;
-    border-radius: 6px;
-    border: 1px solid ${({ theme }) => theme.colors.gray[100]};
-    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-    overflow: hidden;
-
-    > .toolbox {
-      width: 100%;
-      height: 38px;
-      background-color: gray;
-    }
-    > textarea {
-      width: 100%;
-      height: 100%;
-      padding: 10px;
-      resize: unset;
-      font-family: 'Poppins', sans-serif;
-      border: none;
-      transition: 0.2s;
-
-      &::placeholder {
-        font-size: 15px;
-      }
-
-      &:focus {
-        outline: none;
+/* DirectMessage, Club 에서 사용됨 */
+const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // key 조합에 따라서 다른 단축키 edit 기능 추가 가능.
+  const onKeyDownChat = useCallback((e: any) => {
+    if (e.key === 'Enter') {
+      if (!e.shiftKey) {
+        onSubmit();
       }
     }
-  }
-`;
+  }, []);
 
-const ChatBox = ({ register }: IProps) => {
-  const theme = useTheme();
+  useEffect(() => {
+    if (textareaRef.current) {
+      autosize(textareaRef.current);
+    }
+  }, []);
+
   return (
-    <Base theme={theme}>
-      <div className={'container'}>
-        <ul className={'toolbox'}>toolbox</ul>
-        <textarea {...register} placeholder={'Aa'} autoFocus={true} />
-      </div>
-    </Base>
+    <ChatArea>
+      <Form onSubmit={onSubmit}>
+        <MentionsTextarea
+          {...register}
+          autoFocus={true}
+          placeholder={placeholder}
+          onKeyDown={onKeyDownChat}
+          ref={textareaRef}
+        />
+        <Toolbox>
+          <SendButton type={'submit'} disabled={!isValue}>
+            <IoMdSend />
+          </SendButton>
+        </Toolbox>
+      </Form>
+    </ChatArea>
   );
 };
 

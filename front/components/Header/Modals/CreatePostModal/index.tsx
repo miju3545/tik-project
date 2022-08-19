@@ -23,7 +23,7 @@ import {
 import axios from 'axios';
 import MentionMessageModal from '@components/Header/Modals/CreatePostModal/MentionMessageModal';
 import useInput from '@hooks/useInput';
-import TextArea from '@components/TextArea';
+import TextArea from '@components/Inputs/TextArea';
 
 interface IProps {
   show: boolean;

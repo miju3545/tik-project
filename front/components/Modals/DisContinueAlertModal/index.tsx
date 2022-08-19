@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@components/Modal';
 import { ModalContent } from '@components/Header/Modals/ContinueMessageModal';
-import AlertModal from '@components/AlertModal';
+import AlertModal from '@components/Modals/AlertModal';
 
 interface IProps {
   show: boolean;

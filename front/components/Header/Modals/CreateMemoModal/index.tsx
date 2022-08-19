@@ -4,7 +4,7 @@ import ModalContent from '@components/Header/ModalContent';
 import UserInfoHeader from '@components/Header/Modals/CreatePostModal/UserInfoHeader';
 import { useForm } from 'react-hook-form';
 import { Button, Form, FormContainer, InputBox } from '@components/Header/Modals/CreatePostModal/style';
-import TextArea from '@components/TextArea';
+import TextArea from '@components/Inputs/TextArea';
 
 interface IProps {
   show: boolean;

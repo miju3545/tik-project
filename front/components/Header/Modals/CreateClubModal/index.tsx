@@ -77,8 +77,9 @@ const CreateClubModal = ({ show, onCloseModal }: IProps) => {
   }, []);
 
   const onClose = useCallback(() => {
-    onCloseModal();
+    setShowModals((prev) => ({ ...prev, showInviteMembersModal: false }));
     reset();
+    onCloseModal();
   }, []);
 
   const showAlert = useCallback(() => {

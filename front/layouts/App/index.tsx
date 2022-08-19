@@ -8,7 +8,8 @@ import ErrorBoundary from '@components/ErrorBoundary';
 const SignIn = loadable(() => import('@pages/SignIn'));
 const SignUp = loadable(() => import('@pages/SignUp'));
 const Profile = loadable(() => import('@pages/Profile'));
-const Dm = loadable(() => import('@pages/Dm'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
+
 const Workspace = loadable(() => import('@layouts/Workspace'));
 
 const App = () => {
@@ -20,8 +21,8 @@ const App = () => {
             <Route path={'/sign_in'} component={SignIn} />
             <Route path={'/sign_up'} component={SignUp} />
             <Route path={`/profile/:nickname`} component={Profile} />
-            <Route path={'/dm'} component={Dm} />
-            <Route path={'/dm/:id'} component={Dm} />
+            <Route path={'/dm'} component={DirectMessage} />
+            <Route path={'/dm/:id'} component={DirectMessage} />
             <Route path={'/'} component={Workspace} />
           </Switch>
         </BrowserRouter>

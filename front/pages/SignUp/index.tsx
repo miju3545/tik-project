@@ -9,7 +9,7 @@ import { Base } from '@pages/SignIn';
 import SocialLinks from '@components/SocialLinks';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import SignUpSuccessModal from '@components/SignUpSuccessModal';
+import SignUpSuccessModal from '@components/Modals/SignUpSuccessModal';
 import useSWR from 'swr';
 
 interface IForm {

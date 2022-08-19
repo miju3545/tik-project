@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
+import autosize from 'autosize';
 
 interface IProps {
   register: any;
@@ -26,7 +27,15 @@ export const Base = styled.textarea<{ [key: string]: any }>`
 `;
 
 const TextArea = ({ register, isValue, placeholder }: IProps) => {
-  return <Base {...register} isValue={isValue} placeholder={placeholder} />;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      autosize(textareaRef.current);
+    }
+  }, []);
+
+  return <Base {...register} isValue={isValue} placeholder={placeholder} ref={textareaRef} />;
 };
 
 export default TextArea;

@@ -10,7 +10,6 @@ const Home = loadable(() => import('@pages/Home'));
 const Friends = loadable(() => import('@pages/Friends'));
 const Groups = loadable(() => import('@pages/Groups'));
 const Memos = loadable(() => import('@pages/Memos'));
-const Dm = loadable(() => import('@pages/Dm'));
 
 const Workspace: VFC = () => {
   console.log(useParams());

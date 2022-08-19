@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Modal from '@components/Modal';
 import styled from '@emotion/styled';
-import AlertModal from '@components/AlertModal';
+import AlertModal from '@components/Modals/AlertModal';
 
 interface IProps {
   show: boolean;

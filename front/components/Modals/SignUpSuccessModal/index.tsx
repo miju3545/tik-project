@@ -1,5 +1,5 @@
 import React from 'react';
-import AlertModal from '@components/AlertModal';
+import AlertModal from '@components/Modals/AlertModal';
 
 interface IProps {
   show: boolean;
