@@ -12,15 +12,18 @@ interface IProps {
 
 /* DirectMessage, Club 에서 사용됨 */
 const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { ref, ...rest } = register;
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
   // key 조합에 따라서 다른 단축키 edit 기능 추가 가능.
-  const onKeyDownChat = useCallback((e: any) => {
-    if (e.key === 'Enter') {
-      if (!e.shiftKey) {
+  const onKeyDownChat = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.code === 'Enter' && !e.shiftKey) {
         onSubmit();
       }
-    }
-  }, []);
+    },
+    [onSubmit],
+  );
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -32,14 +35,17 @@ const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) =>
     <ChatArea>
       <Form onSubmit={onSubmit}>
         <MentionsTextarea
-          {...register}
+          {...rest}
           autoFocus={true}
           placeholder={placeholder}
-          onKeyDown={onKeyDownChat}
-          ref={textareaRef}
+          onKeyPress={onKeyDownChat}
+          ref={(e) => {
+            ref(e);
+            textareaRef.current = e;
+          }}
         />
         <Toolbox>
-          <SendButton type={'submit'} disabled={!isValue}>
+          <SendButton type={'button'} disabled={!isValue} onClick={onSubmit}>
             <IoMdSend />
           </SendButton>
         </Toolbox>

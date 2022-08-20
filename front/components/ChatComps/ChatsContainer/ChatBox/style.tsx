@@ -30,6 +30,7 @@ export const MentionsTextarea = styled.textarea`
   padding: 9px 10px;
   resize: none;
   font-size: 15px;
+  white-space: pre;
 
   & ul {
     border: 1px solid lightgray;

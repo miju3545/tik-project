@@ -8,6 +8,7 @@ export const ChatZone = styled.div`
 export const Section = styled.section`
   margin-top: 20px;
   border-top: 1px solid #eee;
+  width: 100%;
 `;
 export const StickyHeader = styled.header`
   display: flex;
