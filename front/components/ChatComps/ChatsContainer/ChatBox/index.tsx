@@ -1,18 +1,27 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IoMdSend } from 'react-icons/io';
 import { ChatArea, Form, Toolbox, SendButton, MentionsTextarea, EachMention } from './style';
 import autosize from 'autosize';
+import { Mention, SuggestionDataItem } from 'react-mentions';
+import gravatar from 'gravatar';
+import { useFormContext } from 'react-hook-form';
 
 interface IProps {
-  register: any;
-  onSubmit: () => void;
-  isValue: boolean;
+  value: string;
+  onSubmit: (e?: any) => void;
+  onChange: (e: any) => void;
   placeholder?: string;
 }
 
 /* DirectMessage, Club 에서 사용됨 */
-const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) => {
-  const { ref, ...rest } = register;
+const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
+  const membersData: { id: number; nickname: string }[] = [
+    { id: 1, nickname: 'example' },
+    { id: 2, nickname: 'example2' },
+    { id: 3, nickname: 'example3' },
+    { id: 4, nickname: 'example4' },
+  ];
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // key 조합에 따라서 다른 단축키 edit 기능 추가 가능.
@@ -25,6 +34,29 @@ const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) =>
     [onSubmit],
   );
 
+  const renderSuggestion = useCallback(
+    (
+      suggestion: SuggestionDataItem,
+      search: string,
+      highlightedDisplay: React.ReactNode,
+      index: number,
+      focus: boolean,
+    ): React.ReactNode => {
+      if (!membersData) return;
+
+      return (
+        <EachMention focus={focus}>
+          <img
+            src={gravatar.url(membersData[index].nickname, { s: '20px', d: 'retro' })}
+            alt={membersData[index].nickname}
+          />
+          <span>{highlightedDisplay}</span>
+        </EachMention>
+      );
+    },
+    [membersData],
+  );
+
   useEffect(() => {
     if (textareaRef.current) {
       autosize(textareaRef.current);
@@ -35,17 +67,23 @@ const ChatBox = ({ register, onSubmit, isValue, placeholder = 'Aa' }: IProps) =>
     <ChatArea>
       <Form onSubmit={onSubmit}>
         <MentionsTextarea
-          {...rest}
           autoFocus={true}
           placeholder={placeholder}
           onKeyPress={onKeyDownChat}
-          ref={(e) => {
-            ref(e);
-            textareaRef.current = e;
-          }}
-        />
+          onChange={onChange}
+          value={value}
+          inputRef={textareaRef}
+          allowSuggestionsAboveCursor
+        >
+          <Mention
+            appendSpaceOnAdd
+            trigger={'@'}
+            data={membersData?.map((v) => ({ id: v.id, display: v.nickname })) || []}
+            renderSuggestion={renderSuggestion}
+          />
+        </MentionsTextarea>
         <Toolbox>
-          <SendButton type={'button'} disabled={!isValue} onClick={onSubmit}>
+          <SendButton type={'button'} disabled={!Boolean(value)} onClick={onSubmit}>
             <IoMdSend />
           </SendButton>
         </Toolbox>

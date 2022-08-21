@@ -21,7 +21,6 @@ const App = () => {
             <Route path={'/sign_in'} component={SignIn} />
             <Route path={'/sign_up'} component={SignUp} />
             <Route path={`/profile/:nickname`} component={Profile} />
-            <Route path={'/dm'} component={DirectMessage} />
             <Route path={'/dm/:id'} component={DirectMessage} />
             <Route path={'/'} component={Workspace} />
           </Switch>

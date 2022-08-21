@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Header from '@components/ChatComps/ChatsContainer/Header';
 import ChatList from '@components/ChatComps/ChatsContainer/ChatList';
 import ChatBox from './ChatBox';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from './style';
+import useInput from '@hooks/useInput';
 
 interface IProps {
   show: boolean;
@@ -15,23 +16,18 @@ interface IForm {
 }
 
 const ChatsContainer = ({ show, showSideMenu }: IProps) => {
-  const { register, handleSubmit, watch, reset } = useForm<IForm>({
-    defaultValues: { chat: '' },
-    mode: 'onChange',
-  });
-  const { chat } = watch();
-  const onSubmit = useCallback((data: IForm) => {
-    console.log(data);
-    reset();
+  const [chat, onChangeChat, setChat] = useInput('');
 
-    // axios.post(`/api/dm/:id/chat`)
-  }, []);
+  const onSubmit = useCallback(() => {
+    console.log(chat);
+    setChat('');
+  }, [chat]);
 
   return (
     <Container show={show}>
       <Header show={show} showSideMenu={showSideMenu} />
       <ChatList />
-      <ChatBox register={register('chat')} onSubmit={handleSubmit(onSubmit)} isValue={Boolean(chat)} />
+      <ChatBox value={chat} onChange={onChangeChat} onSubmit={onSubmit} />
     </Container>
   );
 };

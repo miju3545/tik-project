@@ -12,7 +12,6 @@ const Groups = loadable(() => import('@pages/Groups'));
 const Memos = loadable(() => import('@pages/Memos'));
 
 const Workspace: VFC = () => {
-  console.log(useParams());
   return (
     <Base>
       <Header />

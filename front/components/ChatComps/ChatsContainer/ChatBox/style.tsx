@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { MentionsInput } from 'react-mentions';
 
 export const ChatArea = styled.div`
   display: flex;
@@ -13,24 +14,31 @@ export const Form = styled.form`
   width: 100%;
   border-radius: 4px;
   border: 1px solid lightgray;
-  overflow: hidden;
 `;
 
-export const MentionsTextarea = styled.textarea`
+export const MentionsTextarea = styled(MentionsInput)`
+  height: 20px;
+  margin-bottom: 41px;
   & strong {
     background-color: skyblue;
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    line-height: 30px;
+    font-weight: 800;
   }
 
-  font-family: Poppins, sans-serif;
-  width: 100%;
-  height: 44px;
-  outline: none !important;
-  line-height: 22px;
-  border: none;
-  padding: 9px 10px;
-  resize: none;
-  font-size: 15px;
-  white-space: pre;
+  & textarea {
+    font-family: Poppins, sans-serif;
+    width: 100%;
+    outline: none !important;
+    line-height: 22px;
+    border: none;
+    padding: 9px 10px;
+    resize: none;
+    font-size: 15px;
+    white-space: pre;
+  }
 
   & ul {
     border: 1px solid lightgray;
@@ -74,10 +82,16 @@ export const EachMention = styled.button<{ focus: boolean }>`
   align-items: center;
   color: rgb(28, 29, 28);
   width: 100%;
+  transition: 0.2s;
 
   & img {
     margin-right: 5px;
   }
 
-  ${({ focus }) => focus && `background-color: "#1264a3; color: #fff`}
+  ${({ focus }) =>
+    focus &&
+    `
+  background-color: #1264a3; 
+  color: #fff
+ `}
 `;

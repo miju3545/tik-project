@@ -5,6 +5,7 @@ import ChatsMenu from '@components/ChatComps/ChatsMenu';
 import ChatsContainer from '@components/ChatComps/ChatsContainer';
 import LeftSideMenu from '@components/ChatComps/LeftSideMenu';
 import { useParams } from 'react-router-dom';
+import useSocket from '@hooks/useSocket';
 
 export const Base = styled.div``;
 export const Container = styled.div`
@@ -16,10 +17,24 @@ export const Container = styled.div`
 `;
 
 const Dm = () => {
+  const { club } = useParams<{ club: string }>();
+  const userData = { id: 1, nickname: 'example' };
+  const clubsData = [{ id: 1, name: 'genxx' }];
+  const [socket, disconnect] = useSocket(club);
   const [showModals, setShowModals] = useState<{ [key: string]: any }>({ showSideMenu: true });
   const handleModal = useCallback((modalName: string) => {
     setShowModals((prev) => ({ ...prev, [modalName]: !prev[modalName] }));
   }, []);
+
+  useEffect(() => {
+    if (clubsData && userData && socket) {
+      socket.emit('login', { id: userData.id, clubs: clubsData.map((v) => v.id) });
+    }
+  }, [clubsData, userData, socket]);
+
+  useEffect(() => {
+    return () => disconnect();
+  }, [club, disconnect]);
 
   return (
     <Base>

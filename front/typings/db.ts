@@ -1,8 +1,9 @@
 export interface IUser {
   id: number;
   nickname: string;
-  email: string;
-  Workspaces: IWorkspace[];
+  // email: string;
+  // Clubs: IClub[];
+  // Workspaces: IWorkspace[];
 }
 
 export interface IUserWithOnline extends IUser {
@@ -22,21 +23,28 @@ export interface IChat {
   User: IUser;
   content: string;
   createdAt: Date;
-  ChannelId: number;
-  Channel: IChannel;
+  // ChannelId: number;
+  // Channel: IChannel;
 }
 
 export interface IDM {
   id: number;
-  SenderId: number;
+  // SenderId: number;
   Sender: IUser;
-  ReceiverId: number;
+  // ReceiverId: number;
   Receiver: IUser;
   content: string;
-  createdAt: Date;
+  createdAt: number | string;
 }
 
 export interface IWorkspace {
+  id: number;
+  name: string;
+  url: string;
+  OwnerId: number;
+}
+
+export interface IClub {
   id: number;
   name: string;
   url: string;
