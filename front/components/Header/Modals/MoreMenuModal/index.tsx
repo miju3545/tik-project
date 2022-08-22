@@ -13,7 +13,6 @@ import { Header } from '@components/Header/MenuContent/style';
 import CreatePostModal from '@components/Header/Modals/CreatePostModal';
 import { SideMenu } from '@components/Header/Modals/MoreMenuModal/style';
 import CreateMemoModal from '@components/Header/Modals/CreateMemoModal';
-import SearchResultModal from '@components/ChatComps/ChatsMenu/SearchResultModal';
 import { useForm } from 'react-hook-form';
 import SearchForm from '@components/Inputs/SearchInput';
 import styled from '@emotion/styled';

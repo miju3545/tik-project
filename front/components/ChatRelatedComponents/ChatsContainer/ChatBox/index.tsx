@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { IoMdSend } from 'react-icons/io';
 import { ChatArea, Form, Toolbox, SendButton, MentionsTextarea, EachMention } from './style';
 import autosize from 'autosize';
 import { Mention, SuggestionDataItem } from 'react-mentions';
 import gravatar from 'gravatar';
-import { useFormContext } from 'react-hook-form';
 
 interface IProps {
   value: string;
@@ -14,7 +13,7 @@ interface IProps {
 }
 
 /* DirectMessage, Club 에서 사용됨 */
-const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
+const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ value, onChange, onSubmit, placeholder = 'Aa' }, ref) => {
   const membersData: { id: number; nickname: string }[] = [
     { id: 1, nickname: 'example' },
     { id: 2, nickname: 'example2' },
@@ -26,7 +25,7 @@ const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
 
   // key 조합에 따라서 다른 단축키 edit 기능 추가 가능.
   const onKeyDownChat = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    (e: any) => {
       if (e.code === 'Enter' && !e.shiftKey) {
         onSubmit();
       }
@@ -58,8 +57,8 @@ const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
   );
 
   useEffect(() => {
-    if (textareaRef.current) {
-      autosize(textareaRef.current);
+    if (textareaRef?.current) {
+      autosize(textareaRef?.current);
     }
   }, []);
 
@@ -72,7 +71,15 @@ const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
           onKeyPress={onKeyDownChat}
           onChange={onChange}
           value={value}
-          inputRef={textareaRef}
+          inputRef={(node: any) => {
+            textareaRef.current = node;
+            if (typeof ref === 'function') {
+              ref(node);
+            } else if (ref) {
+              ref.current = node;
+            }
+          }}
+          // inputRef={textareaRef}
           allowSuggestionsAboveCursor
         >
           <Mention
@@ -90,6 +97,6 @@ const ChatBox = ({ value, onChange, onSubmit, placeholder = 'Aa' }: IProps) => {
       </Form>
     </ChatArea>
   );
-};
+});
 
 export default ChatBox;

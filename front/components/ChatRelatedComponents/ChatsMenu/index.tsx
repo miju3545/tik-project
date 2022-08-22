@@ -1,16 +1,16 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
-import Header from '@components/ChatComps/ChatsMenu/Header';
+import Header from '@components/ChatRelatedComponents/ChatsMenu/Header';
 import ActionItem from '@components/ActionItem';
 import { BsPencilSquare } from 'react-icons/bs';
 import { RiVideoAddFill } from 'react-icons/ri';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import HoverLabel from '@components/HoverLabel';
-import SearchBox from '@components/ChatComps/ChatsMenu/SearchBox';
+import SearchBox from '@components/ChatRelatedComponents/ChatsMenu/SearchBox';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import ChatList from '@components/ChatComps/ChatsMenu/ChatList';
-import SearchResultModal from '@components/ChatComps/ChatsMenu/SearchResultModal';
+import ChatList from '@components/ChatRelatedComponents/ChatsMenu/ChatList';
+import SearchResultModal from '@components/ChatRelatedComponents/ChatsMenu/SearchResultModal';
 
 interface IForm {
   query: string;

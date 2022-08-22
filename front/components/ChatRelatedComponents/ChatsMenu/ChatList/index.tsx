@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import ChatItem from '@components/ChatComps/ChatsMenu/ChatItem';
-import { useParams } from 'react-router-dom';
-import useSocket from '@hooks/useSocket';
+import ChatItem from '@components/ChatRelatedComponents/ChatsMenu/ChatItem';
 
 export const Base = styled.ul`
   display: flex;

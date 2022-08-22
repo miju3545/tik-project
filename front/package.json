@@ -33,6 +33,7 @@
     "react-mentions": "^4.4.7",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "regexify-string": "^1.0.19",
     "sequelize": "^6.21.3",
     "sequelize-cli": "^6.4.1",
     "socket.io-client": "^2.5.0",

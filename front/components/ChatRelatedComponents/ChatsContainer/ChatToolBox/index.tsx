@@ -6,10 +6,10 @@ import { BsFillReplyFill } from 'react-icons/bs';
 export const Container = styled.ul`
   display: flex;
   align-items: center;
-  position: absolute;
+  //position: absolute;
   padding: 2px;
-  top: -20px;
-  right: 0;
+  //top: -20px;
+  //right: 0;
   background-color: #fff;
   border: 1px solid #dfdfdf;
   border-radius: 4px;

@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { FiArrowLeftCircle } from 'react-icons/fi';
-import SettingsMenuModal from '@components/ChatComps/ChatsContainer/SettingsMenuModal';
+import SettingsMenuModal from '@components/ChatRelatedComponents/ChatsContainer/SettingsMenuModal';
 
 interface IProps {
   show: boolean;

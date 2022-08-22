@@ -17,16 +17,16 @@ export const Form = styled.form`
 `;
 
 export const MentionsTextarea = styled(MentionsInput)`
-  height: 20px;
+  min-height: 20px;
   margin-bottom: 41px;
-  & strong {
-    background-color: skyblue;
-    position: absolute;
-    left: 10px;
-    top: 15px;
-    line-height: 30px;
-    font-weight: 800;
-  }
+  //& strong {
+  //  background-color: skyblue;
+  //  position: absolute;
+  //  left: 10px;
+  //  top: 15px;
+  //  line-height: 30px;
+  //  font-weight: 800;
+  //}
 
   & textarea {
     font-family: Poppins, sans-serif;

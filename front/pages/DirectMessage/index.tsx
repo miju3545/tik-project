@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Header from '@components/Header';
-import ChatsMenu from '@components/ChatComps/ChatsMenu';
-import ChatsContainer from '@components/ChatComps/ChatsContainer';
-import LeftSideMenu from '@components/ChatComps/LeftSideMenu';
+import ChatsMenu from '@components/ChatRelatedComponents/ChatsMenu';
+import ChatsContainer from '@components/ChatRelatedComponents/ChatsContainer';
+import LeftSideMenu from '@components/ChatRelatedComponents/LeftSideMenu';
 import { useParams } from 'react-router-dom';
 import useSocket from '@hooks/useSocket';
+import { IDM } from '@typings/db';
+import makeDateSection from '@utils/makeDateSection';
 
 export const Base = styled.div``;
 export const Container = styled.div`
@@ -17,11 +19,11 @@ export const Container = styled.div`
 `;
 
 const Dm = () => {
-  const { club } = useParams<{ club: string }>();
+  const { club, id } = useParams<{ club: string; id: string }>();
   const userData = { id: 1, nickname: 'example' };
   const clubsData = [{ id: 1, name: 'genxx' }];
   const [socket, disconnect] = useSocket(club);
-  const [showModals, setShowModals] = useState<{ [key: string]: any }>({ showSideMenu: true });
+  const [showModals, setShowModals] = useState<{ [key: string]: any }>({ showRightSideMenu: false });
   const handleModal = useCallback((modalName: string) => {
     setShowModals((prev) => ({ ...prev, [modalName]: !prev[modalName] }));
   }, []);
@@ -41,8 +43,8 @@ const Dm = () => {
       <Header />
       <Container>
         <ChatsMenu />
-        <ChatsContainer show={showModals.showSideMenu} showSideMenu={() => handleModal('showSideMenu')} />
-        <LeftSideMenu show={showModals.showSideMenu} onCloseModal={() => handleModal('showSideMenu')} />
+        <ChatsContainer show={showModals.showRightSideMenu} showSideMenu={() => handleModal('showRightSideMenu')} />
+        <LeftSideMenu show={showModals.showRightSideMenu} onCloseModal={() => handleModal('showRightSideMenu')} />
       </Container>
     </Base>
   );
