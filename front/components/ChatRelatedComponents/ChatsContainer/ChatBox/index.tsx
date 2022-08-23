@@ -1,19 +1,20 @@
-import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, MutableRefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { IoMdSend } from 'react-icons/io';
-import { ChatArea, Form, Toolbox, SendButton, MentionsTextarea, EachMention } from './style';
+import { ChatArea, Form, ToolBoxContainer, SendButton, MentionsTextarea, EachMention } from './style';
 import autosize from 'autosize';
 import { Mention, SuggestionDataItem } from 'react-mentions';
 import gravatar from 'gravatar';
+import ChatToolBox from '@components/ChatRelatedComponents/ChatsContainer/ChatToolBox';
+import { ChatContext, IChatContext } from '@components/ChatRelatedComponents/ChatsContainer';
 
 interface IProps {
-  value: string;
-  onSubmit: (e?: any) => void;
-  onChange: (e: any) => void;
   placeholder?: string;
 }
 
 /* DirectMessage, Club 에서 사용됨 */
-const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ value, onChange, onSubmit, placeholder = 'Aa' }, ref) => {
+const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ placeholder = 'Aa' }, textareaRef) => {
+  const context = useContext<IChatContext | null>(ChatContext);
+  const myData = { id: 11, nickname: 'rovxx' };
   const membersData: { id: number; nickname: string }[] = [
     { id: 1, nickname: 'example' },
     { id: 2, nickname: 'example2' },
@@ -21,16 +22,15 @@ const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ value, onChange, onSu
     { id: 4, nickname: 'example4' },
   ];
 
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
   // key 조합에 따라서 다른 단축키 edit 기능 추가 가능.
   const onKeyDownChat = useCallback(
     (e: any) => {
       if (e.code === 'Enter' && !e.shiftKey) {
-        onSubmit();
+        // onSubmit();
+        context?.onSubmit();
       }
     },
-    [onSubmit],
+    [context?.onSubmit],
   );
 
   const renderSuggestion = useCallback(
@@ -57,29 +57,22 @@ const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ value, onChange, onSu
   );
 
   useEffect(() => {
-    if (textareaRef?.current) {
-      autosize(textareaRef?.current);
+    const current = (textareaRef as MutableRefObject<HTMLTextAreaElement>)?.current;
+    if (current) {
+      autosize(current);
     }
   }, []);
 
   return (
     <ChatArea>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={context?.onSubmit}>
         <MentionsTextarea
           autoFocus={true}
           placeholder={placeholder}
           onKeyPress={onKeyDownChat}
-          onChange={onChange}
-          value={value}
-          inputRef={(node: any) => {
-            textareaRef.current = node;
-            if (typeof ref === 'function') {
-              ref(node);
-            } else if (ref) {
-              ref.current = node;
-            }
-          }}
-          // inputRef={textareaRef}
+          onChange={context?.onChangeChat}
+          value={context?.chat}
+          inputRef={textareaRef}
           allowSuggestionsAboveCursor
         >
           <Mention
@@ -89,11 +82,12 @@ const ChatBox = forwardRef<HTMLTextAreaElement, IProps>(({ value, onChange, onSu
             renderSuggestion={renderSuggestion}
           />
         </MentionsTextarea>
-        <Toolbox>
-          <SendButton type={'button'} disabled={!Boolean(value)} onClick={onSubmit}>
+        <ToolBoxContainer>
+          <ChatToolBox />
+          <SendButton type={'button'} disabled={!Boolean(context?.chat)} onClick={context?.onSubmit}>
             <IoMdSend />
           </SendButton>
-        </Toolbox>
+        </ToolBoxContainer>
       </Form>
     </ChatArea>
   );

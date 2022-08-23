@@ -16,7 +16,8 @@ export const Base = styled.div`
 
 export const Main = styled.main`
   flex: 1.5;
-  height: 10000px;
+  height: 100vh;
+  position: relative;
   border: 1px solid #dfdfdf;
 `;
 

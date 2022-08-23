@@ -15,6 +15,37 @@
 - 로그아웃
 - return "ok"
 
+
+## DM
+
+### GET /club/:club/chats
+- :club 내부의 채팅을 가져옴
+- query: { perPage: number(한 페이지 당 몇 개), page: number(페이지) }
+- return IChat[]
+
+### GET /club/:club/chats/unreads
+- :club 내부의 안 읽은 채팅의 유무를 가져옴
+- query: { after: TimeStamp }
+- return: number
+
+### POST /club/:club/chats
+- :club 내부에 채팅 저장
+- body: { content: string(내용) }
+- return: "ok"
+- message: 소켓 이벤트가 emit 됨
+- 
+### POST /club/:club/chats
+- :club 내부에 이미지 저장
+- body: { content: string(내용) }
+- return: "ok"
+- message: 소켓 이벤트가 emit 됨
+
+### POST /club/:club/dm/:id/images 
+- :club 내부의 :id 에게 보낸 이미지 저장
+- body: { content: string(내용) }
+- return: "ok"
+- dm 소켓 이벤트가 emit 됨
+
 # WebSocket
 - 웹소켓 API
 

@@ -20,6 +20,7 @@ export const Container = styled.div`
 
 const Dm = () => {
   const { club, id } = useParams<{ club: string; id: string }>();
+  const myData = { id: 11, nickname: 'rovxx' };
   const userData = { id: 1, nickname: 'example' };
   const clubsData = [{ id: 1, name: 'genxx' }];
   const [socket, disconnect] = useSocket(club);

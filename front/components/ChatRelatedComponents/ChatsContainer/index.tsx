@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, createContext } from 'react';
 import Header from '@components/ChatRelatedComponents/ChatsContainer/Header';
 import ChatList from '@components/ChatRelatedComponents/ChatsContainer/ChatList';
 import ChatBox from './ChatBox';
-import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from './style';
 import useInput from '@hooks/useInput';
 import { IDM } from '@typings/db';
@@ -11,6 +10,8 @@ import useSWRInfinite from 'swr/infinite';
 import fetcher from '@utils/fetcher';
 import { useParams } from 'react-router-dom';
 import makeDateSection from '@utils/makeDateSection';
+import useSocket from '@hooks/useSocket';
+import DragOver from '@components/ChatRelatedComponents/ChatsContainer/DragOver';
 
 interface IProps {
   show: boolean;
@@ -21,13 +22,37 @@ interface IForm {
   chat: string;
 }
 
+type IFile = {
+  name: string;
+  size: number;
+  type: string;
+};
+
+export interface IChatContext {
+  chat: string;
+  onChangeChat: (e: any) => void;
+  setChat: React.Dispatch<React.SetStateAction<string>>;
+  files: IFile[];
+  onChangeFiles: any;
+  setFiles: React.Dispatch<React.SetStateAction<any>>;
+  onSubmit: (e?: any) => void;
+  [key: string]: any;
+}
+
+export const ChatContext = createContext<IChatContext | null>(null);
+
 const ChatsContainer = ({ show, showSideMenu }: IProps) => {
   const myData = { id: 1, nickname: 'me' };
   const userData = { id: 1, nickname: 'example' };
+  const club = 'general';
+  const { id } = useParams<{ id: string }>();
   const [chat, onChangeChat, setChat] = useInput('');
+  const [dragOver, setDragOver] = useState(false);
+  const [files, setFiles] = useState<IFile[]>([]);
+  const [socket] = useSocket(club);
   const scrollbarRef = useRef<Scrollbars>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { id } = useParams<{ id: string }>();
+
   const {
     data: chatData,
     mutate: mutateChat,
@@ -41,24 +66,33 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: myData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-10',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 19,
       content: '@[example3](3) 안녕 만나서 반가어zzzzz\n',
+      SenderId: 1,
       Sender: { id: 2, nickname: myData.nickname + id },
+      ReceiverId: 2,
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-10',
     },
     {
       id: 18,
       content: '@[example3](3) 안녕 만나서 반가어\n',
+      SenderId: 1,
       Sender: { id: 2, nickname: myData.nickname + id },
+      ReceiverId: 2,
+
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-10',
     },
     {
       id: 17,
       content: '@[example3](3) 안녕 만나서 반가어\n',
+      SenderId: 1,
+      ReceiverId: 2,
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-10',
@@ -69,6 +103,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 4, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-09',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 15,
@@ -76,6 +112,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-09',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 14,
@@ -83,6 +121,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 4, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-09',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 13,
@@ -90,6 +130,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-08',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 12,
@@ -97,6 +139,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 4, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-08',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 11,
@@ -104,6 +148,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 6, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-08',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 10,
@@ -111,6 +157,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-07',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 9,
@@ -118,6 +166,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-06',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 8,
@@ -125,6 +175,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-06',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 7,
@@ -132,6 +184,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-06',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 6,
@@ -139,6 +193,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 2, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-05',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 5,
@@ -148,6 +204,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 4, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-05',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 4,
@@ -157,6 +215,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 6, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-04',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 3,
@@ -166,6 +226,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 6, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-03',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 2,
@@ -175,6 +237,8 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 6, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-01',
+      SenderId: 1,
+      ReceiverId: 2,
     },
     {
       id: 1,
@@ -183,14 +247,20 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
       Sender: { id: 6, nickname: userData.nickname + id },
       Receiver: { id: 3, nickname: 'mee' },
       createdAt: '2022-08-01',
+      SenderId: 1,
+      ReceiverId: 2,
     },
   ];
 
   const isEmpty = chatData?.[0]?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData[chatData.length - 1]?.length < 20) || false;
 
+  const onChangeFiles = useCallback((e: any) => {
+    console.log(e.target.files);
+  }, []);
+
   const onSubmit = useCallback(() => {
-    console.log('>>>', chat.trim());
+    // console.log('>>>', chat.trim());
     const savedChat = chat;
     // axios 로 서버에 도달하기 이전에 데이터 집어 넣기
     // mutateChat((prevChatData) => {
@@ -202,42 +272,100 @@ const ChatsContainer = ({ show, showSideMenu }: IProps) => {
     //     ReceiverId: userData.id,
     //     Receiver: userData,
     //     createdAt: new Date(),
+    //   });
     //
-    //     return prevChatData
-    //   }, false);
+    //   return prevChatData;
+    // }, false);
     // }).then(() => {
     //     setChat('');
     //    scrollbarRef?.current?.scrollToBottom();
     // });
 
-    // axios. //
+    // axios.
 
     setChat('');
     scrollbarRef?.current?.scrollToBottom();
     // textareaRef?.current?.
   }, [chat, chatsData]);
 
+  // const onMessage = useCallback((data: IDM) => {
+  //   // if ((data.Channel.name === channel && data.content.startsWith('uploads\\')) || data.UserId !== myData?.id) => channel
+  //     if (data.SenderId === Number(id) && myData.id !== Number(id)) {
+  //       mutateChat((chatData) => {
+  //         return { data, ...chatData };
+  //       }, false).then(() => {
+  //         if (scrollbarRef.current) {
+  //           if (
+  //             scrollbarRef.current.getScrollHeight() <
+  //             scrollbarRef.current.getClientHeight() + scrollbarRef.current.getScrollTop() + 150
+  //           ) {
+  //             console.log('scrollToBottom', scrollbarRef.current.getValues());
+  //             setTimeout(() => {
+  //               scrollbarRef.current?.scrollToBottom();
+  //             }, 50);
+  //           }
+  //         }
+  //       });
+  //     }
+  // }, []);
+  //
+  // useEffect(() => {
+  //   socket?.on('dm', onMessage);
+  //   return socket?.off('dm', onMessage);
+  // }, [socket, onMessage]);
+
   const chatSections = makeDateSection(chatsData ? [...chatsData].flat().reverse() : []);
 
-  // 로딩 시 스크롤바 제일 아래로
-  // chatData?.length === 1 로 변경할 것.
   useEffect(() => {
-    if (chatsData?.length === 20) {
+    if (chatsData?.length === 1) {
       scrollbarRef.current?.scrollToBottom();
     }
   }, [chatsData]);
 
+  const onDragOver = useCallback((e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setDragOver(true);
+  }, []);
+
+  // onDrop 시 이미지 업로드
+  const onDrop = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      setDragOver(false);
+      const formData = new FormData();
+      let items = e.dataTransfer.items || e.dataTransfer.files || [];
+      for (let i = 0; i < items.length; i++) {
+        const file = items[i].kind === 'file' ? items[i].getAsFile() : items[i];
+        formData.append('image', file);
+      }
+
+      // axios ~~ then =>
+    },
+    [mutateChat, club, id],
+  );
+
+  const contextValues = {
+    chat,
+    onChangeChat,
+    setChat,
+    files,
+    setFiles,
+    onChangeFiles,
+    onSubmit,
+  };
+
+  /* mission - 어다까지 읽었는지 표시 */
+  /* mission - 스크롤이 위에 있을 때(과거 내역 읽고 있는 중) 추가된 메시지는 하단에 10초간 띄워져 있기. */
+
   return (
-    <Container show={show}>
+    <Container show={show} onDragOver={onDragOver} onDrop={onDrop}>
       <Header show={show} showSideMenu={showSideMenu} />
-      <ChatList
-        chatSections={chatSections}
-        ref={scrollbarRef}
-        setSize={setSize}
-        isEmpty={isEmpty}
-        isReachingEnd={isReachingEnd}
-      />
-      <ChatBox value={chat} onChange={onChangeChat} onSubmit={onSubmit} ref={textareaRef} />
+      <ChatList chatSections={chatSections} ref={scrollbarRef} setSize={setSize} isReachingEnd={isReachingEnd} />
+      <ChatContext.Provider value={contextValues}>
+        <ChatBox ref={textareaRef} />
+      </ChatContext.Provider>
+      {dragOver && <DragOver />}
     </Container>
   );
 };

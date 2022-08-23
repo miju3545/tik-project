@@ -29,9 +29,9 @@ export interface IChat {
 
 export interface IDM {
   id: number;
-  // SenderId: number;
+  SenderId: number;
   Sender: IUser;
-  // ReceiverId: number;
+  ReceiverId: number;
   Receiver: IUser;
   content: string;
   createdAt: number | string;

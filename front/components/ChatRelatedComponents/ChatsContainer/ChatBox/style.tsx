@@ -19,14 +19,15 @@ export const Form = styled.form`
 export const MentionsTextarea = styled(MentionsInput)`
   min-height: 20px;
   margin-bottom: 41px;
-  //& strong {
-  //  background-color: skyblue;
-  //  position: absolute;
-  //  left: 10px;
-  //  top: 15px;
-  //  line-height: 30px;
-  //  font-weight: 800;
-  //}
+
+  & strong {
+    background-color: skyblue;
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    line-height: 30px;
+    font-weight: 800;
+  }
 
   & textarea {
     font-family: Poppins, sans-serif;
@@ -51,7 +52,7 @@ export const MentionsTextarea = styled(MentionsInput)`
   }
 `;
 
-export const Toolbox = styled.div`
+export const ToolBoxContainer = styled.div`
   position: relative;
   background-color: rgb(248, 248, 248);
   height: 41px;
@@ -60,6 +61,7 @@ export const Toolbox = styled.div`
   align-items: center;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+  padding: 0 10px;
 `;
 
 export const SendButton = styled.button<{ disabled: boolean }>`

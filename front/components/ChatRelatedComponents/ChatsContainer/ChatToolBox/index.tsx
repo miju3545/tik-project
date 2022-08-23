@@ -1,48 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from '@emotion/styled';
-import HoverLabel from '@components/HoverLabel';
-import { BsFillReplyFill } from 'react-icons/bs';
+import { ChatContext, IChatContext } from '@components/ChatRelatedComponents/ChatsContainer';
 
 export const Container = styled.ul`
   display: flex;
-  align-items: center;
-  //position: absolute;
-  padding: 2px;
-  //top: -20px;
-  //right: 0;
-  background-color: #fff;
-  border: 1px solid #dfdfdf;
-  border-radius: 4px;
 `;
-export const ToolItem = styled.li`
-  width: 34px;
-  height: 34px;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
+export const ToolButton = styled.label`
+  border: 1px solid gray;
+  padding: 4px;
   cursor: pointer;
   border-radius: 4px;
-
-  &:hover {
-    background-color: #eee;
-  }
 `;
 
 const ChatToolBox = () => {
+  const context = useContext<IChatContext | null>(ChatContext);
+  console.log('files >>>', context?.files);
   return (
     <Container>
-      <HoverLabel
-        label={'댓글'}
-        children={
-          <ToolItem>
-            <BsFillReplyFill />
-          </ToolItem>
-        }
-        style={{ top: '-40px' }}
-      />
-      <HoverLabel label={'기타'} children={<ToolItem>...</ToolItem>} style={{ top: '-40px' }} />
+      <ToolButton>
+        <span>사진/동영상 업로드</span>
+        <input type={'file'} onChange={context?.onChangeFiles} multiple hidden />
+      </ToolButton>
     </Container>
   );
 };
